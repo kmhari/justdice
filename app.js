@@ -3,11 +3,11 @@
  * Module dependencies.
  */
 
-var express = require('express');
-var http = require('http');
-var socketio = require('socket.io');
-var mysql      = require('mysql');
-var app = express();
+ var express = require('express');
+ var http = require('http');
+ var socketio = require('socket.io');
+ var mysql      = require('mysql');
+ var app = express();
 
 // all environments
 app.set('port', process.env.PORT || 8000);
@@ -19,13 +19,13 @@ app.use(express.methodOverride());
 
 // development only
 if ('development' == app.get('env')) {
-  app.use(express.errorHandler());
+	app.use(express.errorHandler());
 }
 
 var connection = mysql.createConnection({
-  host     : 'localhost',
-  user     : 'root',
-  password : '',
+	host     : 'localhost',
+	user     : 'root',
+	password : '',
 });
 
 // connection.connect();
@@ -35,23 +35,39 @@ var io = socketio.listen(server);
 
 
 io.sockets.on('connection', function(socket){
-    socket.on('message', function(message){
-        console.log('received message:', message);
+	socket.on('message', function(message){
+		console.log('received message:', message);
+		switch(message.action){
+			case "new-bet":
+			process_new_bet(message);
+			break;
+			case "randomize-seed":
+			process_randomize_seed(message);
+			break;
+		}
         // io.sockets.emit('message', message);
     });
 });
 
+function process_new_bet(message){
+	console.log("processing new bet");
+}
+
+function process_randomize_seed(message){
+
+}
+
 server.listen(app.get('port'), function(){
-  console.log('Express server listening on port ' + app.get('port'));
+	console.log('Express server listening on port ' + app.get('port'));
 });
 
 
 
 function test()
 {connection.query('SELECT 1 + 1 AS solution', function(err, rows, fields) {
-  if (err) throw err;
+	if (err) throw err;
 
-  console.log('The solution is: ', rows[0].solution);
+	console.log('The solution is: ', rows[0].solution);
 });
 }
 connection.end();
