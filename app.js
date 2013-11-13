@@ -6,7 +6,7 @@
  var express = require('express');
  var http = require('http');
  var socketio = require('socket.io');
-
+ var Seed = require('./seed');
  var app = express();
  var dice = require('./dice');
  var User = require('./users');
@@ -52,6 +52,10 @@ function process_new_bet(message){
 	var pivot = dice.get_roll_pivot(message.chance,message.roll);
 	console.log(pivot);
 	console.log("Payout="+dice.calculate_payout(message.chance)+"X");
+	var seed = Seed.create_server_seed();
+	console.log("seed:"+seed);
+	console.log(Seed.get_server_hash_by_seed(seed));
+
 }
 
 function process_randomize_seed(message){
