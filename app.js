@@ -6,9 +6,10 @@
  var express = require('express');
  var http = require('http');
  var socketio = require('socket.io');
- var mysql      = require('mysql');
+
  var app = express();
  var dice = require('./dice');
+ var User = require('./users');
 
 // all environments
 app.set('port', process.env.PORT || 8000);
@@ -23,11 +24,6 @@ if ('development' == app.get('env')) {
 	app.use(express.errorHandler());
 }
 
-var connection = mysql.createConnection({
-	host     : 'localhost',
-	user     : 'root',
-	password : '',
-});
 
 // connection.connect();
 
@@ -46,6 +42,7 @@ io.sockets.on('connection', function(socket){
 			process_randomize_seed(message);
 			break;
 		}
+		test()
         // io.sockets.emit('message', message);
     });
 });
@@ -68,10 +65,10 @@ server.listen(app.get('port'), function(){
 
 
 function test()
-{connection.query('SELECT 1 + 1 AS solution', function(err, rows, fields) {
-	if (err) throw err;
-
-	console.log('The solution is: ', rows[0].solution);
-});
+{
+	console.log("displaying");
+	User.find(1,function(data){
+		console.log(data);
+	})
 }
-connection.end();
+
