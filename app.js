@@ -8,6 +8,7 @@
  var socketio = require('socket.io');
  var mysql      = require('mysql');
  var app = express();
+ var dice = require('./dice');
 
 // all environments
 app.set('port', process.env.PORT || 8000);
@@ -51,6 +52,9 @@ io.sockets.on('connection', function(socket){
 
 function process_new_bet(message){
 	console.log("processing new bet");
+	var pivot = dice.get_roll_pivot(message.chance,message.roll);
+	console.log(pivot);
+	console.log("Payout="+dice.calculate_payout(message.chance)+"X");
 }
 
 function process_randomize_seed(message){
