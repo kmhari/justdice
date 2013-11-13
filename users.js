@@ -37,7 +37,7 @@ User.set_new_seed = function(gid,seed_detail_id,callback){
 			console.log(err);
 			throw err;
 		}
-		callback(rows[0]);
+		callback(rows);
 	}
 	)
 };
