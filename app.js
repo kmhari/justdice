@@ -49,7 +49,31 @@ io.sockets.on('connection', function(socket){
     socket.on('justnow',function(message){
     	console.log(message);
     	User.fing_by_gid(message.gid,function(data){
-    		console.log(data);
+    		if(data.seed_detail_id==0){
+    			SeedDetail.create(data.gid,function(seed_data){
+    				User.set_new_seed(data.gid,seed_data.id,function(user_update){
+    					if(user_update.changedRows==1){
+    						message = {
+    							"ssh" : Seed.get_server_hash_by_seed(seed_data.server_seed),
+    							"cs" : seed_data.client_seed,
+    							"nonce" : 1
+    						};
+    						socket.emit("message",message);
+    					}else{
+
+    					}
+    				});	
+    			})
+    		}else{
+    			SeedDetail.find(data.seed_detail_id,function(seed_data){
+    				message = {
+						"ssh" : Seed.get_server_hash_by_seed(seed_data.server_seed),
+						"cs" : seed_data.client_seed,
+						"nonce" : 1
+					};
+					socket.emit("message",message);
+    			})
+    		}
     	});
     });
 });
@@ -73,8 +97,6 @@ function process_new_bet(message){
 	// console.log("server-Hash:"+ssh);
 	// console.log("\n\n\n\n");
 	// Seed.roll(ssh,ss,cs,1,3);
-
-
 })
 }
 
