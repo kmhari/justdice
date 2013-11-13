@@ -61,7 +61,7 @@ function process_new_bet(message){
 	console.log("client:"+cs);
 	console.log("server-Hash:"+ssh);
 	console.log("\n\n\n\n");
-	Seed.check(ssh,ss,cs);
+	Seed.roll(ssh,ss,cs,1,3);
 })
 }
 
