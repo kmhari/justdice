@@ -13,10 +13,6 @@ SeedDetail.create = function (user_id,callback){
 			console.log(err);
 			throw err;
 		}
-		if(rows.length==0){
-			console.log("No user by the id:"+id);
-			throw {err:"user not found",id:id}
-		}
 		SeedDetail.find(rows.insertId,callback);
 	})
 };
