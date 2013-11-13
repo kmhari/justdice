@@ -1,12 +1,6 @@
 var User = exports = module.exports = {};
 var db = require("./connect");
-
-function map_obj(obj){
-	return $.map(obj, function(value, index) {
-		return [value];
-	});
-}
-
+	
 User.find = function (id,callback){
 	db.query('SELECT * FROM users where id = ?',id, function(err, rows, fields) {
 		if (err) {

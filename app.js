@@ -10,6 +10,7 @@
  var app = express();
  var dice = require('./dice');
  var User = require('./users');
+ var SeedDetail = require('./seed_detail');
 
 // all environments
 app.set('port', process.env.PORT || 8000);
@@ -44,6 +45,13 @@ io.sockets.on('connection', function(socket){
 		}
         // io.sockets.emit('message', message);
     });
+    
+    socket.on('justnow',function(message){
+    	console.log(message);
+    	User.fing_by_gid(message.gid,function(data){
+    		console.log(data);
+    	});
+    });
 });
 
 function process_new_bet(message){
@@ -51,17 +59,22 @@ function process_new_bet(message){
 	user_data = data;
 	
 	console.log("processing new bet");
-	var pivot = dice.get_roll_pivot(message.chance,message.roll);
-	console.log(pivot);
-	console.log("Payout="+dice.calculate_payout(message.chance)+"X");
-	var ss = Seed.create_server_seed();
-	var cs = Seed.create_client_seed();
-	var ssh = Seed.get_server_hash_by_seed(ss);
-	console.log("seed:"+ss);
-	console.log("client:"+cs);
-	console.log("server-Hash:"+ssh);
-	console.log("\n\n\n\n");
-	Seed.roll(ssh,ss,cs,1,3);
+	SeedDetail.create(1,function(result){
+		console.log(result);
+	});
+	// var pivot = dice.get_roll_pivot(message.chance,message.roll);
+	// console.log(pivot);
+	// console.log("Payout="+dice.calculate_payout(message.chance)+"X");
+	// var ss = Seed.create_server_seed();
+	// var cs = Seed.create_client_seed();
+	// var ssh = Seed.get_server_hash_by_seed(ss);
+	// console.log("seed:"+ss);
+	// console.log("client:"+cs);
+	// console.log("server-Hash:"+ssh);
+	// console.log("\n\n\n\n");
+	// Seed.roll(ssh,ss,cs,1,3);
+
+
 })
 }
 
