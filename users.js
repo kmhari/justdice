@@ -30,3 +30,14 @@ User.fing_by_gid = function(gid,callback){
 	}
 	)
 };
+
+User.set_new_seed = function(gid,seed_detail_id,callback){
+	db.query('UPDATE users set seed_detail_id = ? where gid = ? ',[seed_detail_id,gid], function(err, rows, fields) {
+		if (err) {
+			console.log(err);
+			throw err;
+		}
+		callback(rows[0]);
+	}
+	)
+};
