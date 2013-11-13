@@ -42,20 +42,27 @@ io.sockets.on('connection', function(socket){
 			process_randomize_seed(message);
 			break;
 		}
-		test()
         // io.sockets.emit('message', message);
     });
 });
 
 function process_new_bet(message){
+	User.find(1,function(data){
+	user_data = data;
+	
 	console.log("processing new bet");
 	var pivot = dice.get_roll_pivot(message.chance,message.roll);
 	console.log(pivot);
 	console.log("Payout="+dice.calculate_payout(message.chance)+"X");
-	var seed = Seed.create_server_seed();
-	console.log("seed:"+seed);
-	console.log(Seed.get_server_hash_by_seed(seed));
-
+	var ss = Seed.create_server_seed();
+	var cs = Seed.create_client_seed();
+	var ssh = Seed.get_server_hash_by_seed(ss);
+	console.log("seed:"+ss);
+	console.log("client:"+cs);
+	console.log("server-Hash:"+ssh);
+	console.log("\n\n\n\n");
+	Seed.check(ssh,ss,cs);
+})
 }
 
 function process_randomize_seed(message){
@@ -71,8 +78,6 @@ server.listen(app.get('port'), function(){
 function test()
 {
 	console.log("displaying");
-	User.find(1,function(data){
-		console.log(data);
-	})
+	
 }
 
