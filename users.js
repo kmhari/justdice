@@ -9,7 +9,6 @@ User.find = function (id,callback){
 		}
 		if(rows.length==0){
 			console.log("No user by the id:"+id);
-			throw {err:"user not found",id:id}
 		}
 		callback(rows[0]);
 	}
@@ -24,9 +23,9 @@ User.fing_by_gid = function(gid,callback){
 		}
 		if(rows.length==0){
 			console.log("No user by the gid:"+gid);
-			throw {err:"user not found",gid:gid}
-		}
-		callback(rows[0]);
+			callback(null,{err:"Gid Not Found",code:1})
+		}else
+		callback(rows[0],null);
 	}
 	)
 };
