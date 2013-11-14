@@ -14,7 +14,7 @@ Bet.create = function (options,callback){
 			console.log("No user by the id:"+id);
 			throw {err:"user not found",id:id}
 		}else{
-		callback(rows[0]);
+		callback(rows);
 		}
 	})
 };
