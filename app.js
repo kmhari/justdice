@@ -11,6 +11,7 @@
  var dice = require('./dice');
  var User = require('./users');
  var SeedDetail = require('./seed_detail');
+ var err_code = require("./error_code");
 
 // all environments
 app.set('port', process.env.PORT || 8000);
@@ -45,47 +46,69 @@ io.sockets.on('connection', function(socket){
 		}
         // io.sockets.emit('message', message);
     });
-    
-    socket.on('justnow',function(message){
-    	console.log(message);
-    	User.fing_by_gid(message.gid,function(data){
-    		if(data.seed_detail_id==0){
-    			SeedDetail.create(data.gid,function(seed_data){
-    				User.set_new_seed(data.gid,seed_data.id,function(user_update){
-    					if(user_update.changedRows==1){
-    						message = {
-    							"ssh" : Seed.get_server_hash_by_seed(seed_data.server_seed),
-    							"cs" : seed_data.client_seed,
-    							"nonce" : 1
-    						};
-    						socket.emit("message",message);
-    					}else{
 
-    					}
-    				});	
-    			})
-    		}else{
-    			SeedDetail.find(data.seed_detail_id,function(seed_data){
-    				message = {
-						"ssh" : Seed.get_server_hash_by_seed(seed_data.server_seed),
-						"cs" : seed_data.client_seed,
-						"nonce" : 1
-					};
-					socket.emit("message",message);
-    			})
-    		}
-    	});
-    });
+	socket.on('justnow',function(message){
+		User.fing_by_gid(message.gid,function(data,err){
+			if(err){
+				console.log(err);
+				console.log(handle_error(err,"justnow"));
+				socket.emit("error",handle_error(err,"justnow"));
+			}else{
+				console.log("Executing else Part");
+				if(data.seed_detail_id==0){
+					SeedDetail.create(data.gid,function(seed_data){
+						User.set_new_seed(data.gid,seed_data.id,function(user_update){
+							if(user_update.changedRows==1){
+								message = {
+									"action" : "seed_data",
+									"ssh" : Seed.get_server_hash_by_seed(seed_data.server_seed),
+									"cs" : seed_data.client_seed,
+									"nonce" : 1
+								};
+								socket.emit("message",message);
+							}else{
+
+							}
+						});	
+					})
+				}else{
+					SeedDetail.find(data.seed_detail_id,function(seed_data){
+						message = {
+							"action" : "seed_data",
+							"ssh" : Seed.get_server_hash_by_seed(seed_data.server_seed),
+							"cs" : seed_data.client_seed,
+							"nonce" : 1
+						};
+						socket.emit("message",message);
+					})
+				}
+			}
+		})
+
+});
 });
 
+function handle_error(err,action){
+	switch(action){
+		case "justnow":
+		return handle_just_now(err);
+		break;
+	}
+}
+
+function handle_just_now(err){
+	return {err:1,message:"Kindly Delete the Cookies and try again"};
+}
+
 function process_new_bet(message){
-	User.find(1,function(data){
-	user_data = data;
-	
-	console.log("processing new bet");
-	SeedDetail.create(1,function(result){
-		console.log(result);
-	});
+
+	User.find_by_gid(message.gid,function(data){
+		user_data = data;
+
+		console.log("processing new bet");
+		SeedDetail.create(1,function(result){
+			console.log(result);
+		});
 	// var pivot = dice.get_roll_pivot(message.chance,message.roll);
 	// console.log(pivot);
 	// console.log("Payout="+dice.calculate_payout(message.chance)+"X");
