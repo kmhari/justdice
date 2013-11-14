@@ -1,15 +1,19 @@
 var User = exports = module.exports = {};
 var db = require("./connect");
-	
+var Bet = require('./bet');
+var Dice = require('./dice');
+var SeedDetail = require('./seed_detail');
+var Seed = require('./seed');
+
 User.find = function (id,callback){
 	db.query('SELECT * FROM users where id = ?',id, function(err, rows, fields) {
 		if (err) {
 			console.log(err);
 			throw err;
-		}
+		}else
 		if(rows.length==0){
 			console.log("No user by the id:"+id);
-		}
+		}else
 		callback(rows[0]);
 	}
 	)
@@ -35,8 +39,42 @@ User.set_new_seed = function(gid,seed_detail_id,callback){
 		if (err) {
 			console.log(err);
 			throw err;
-		}
+		}else
 		callback(rows);
 	}
 	)
 };
+
+User.bet = function(message,callback){
+    User.fing_by_gid(message.gid,function(data,err){
+        Bet.get_next_nonce([data.id,data.seed_detail_id],function(nonce_data){
+            nonce_data++;
+            SeedDetail.find(data.seed_detail_id,function(seed_data){
+                var roll = (message.roll=="rhigh")?"high":"low";
+                var target = Dice.get_target(message.chance,message.roll);
+                var ssh = Seed.get_server_hash_by_seed(seed_data.server_seed);
+                var ss = seed_data.server_seed;
+                var cs = seed_data.client_seed;
+                var payout = Dice.calculate_payout(message.chance);
+                var sn = 1;
+                var nb = nonce_data;
+                var result = Seed.get_result(ssh,ss,cs,sn,nb);    
+                if(roll=="high") 
+                    won = result>target;
+                else 
+                    won = result<target;
+                            
+                console.log(result+" "+((roll=="high")?">":"<")+target)
+                console.log((won)?"won":"lost");
+                console.log(won);
+                var profit = (won)?Dice.calculate_profit(message.bet,message.chance):-1*message.bet;
+                //user_id,seed_detail_id,roll,won,bet,payout,profit,chance,target,lucky,nonce
+                var bet_details = [data.id,data.seed_detail_id,roll,won,message.bet,payout,profit,message.chance,target,result,nonce_data];
+                Bet.create(bet_details,function(bet_result_data){
+                    console.log(bet_result_data);
+                })
+            })
+            
+        })
+	});
+}

@@ -7,6 +7,7 @@
  var http = require('http');
  var socketio = require('socket.io');
  var Seed = require('./seed');
+ var Bet = require('./bet');
  var app = express();
  var dice = require('./dice');
  var User = require('./users');
@@ -35,7 +36,7 @@ var io = socketio.listen(server);
 
 io.sockets.on('connection', function(socket){
 	socket.on('message', function(message){
-		console.log('received message:', message);
+//		console.log('received message:', message);
 		switch(message.action){
 			case "new-bet":
 			process_new_bet(message);
@@ -54,9 +55,8 @@ io.sockets.on('connection', function(socket){
 				console.log(handle_error(err,"justnow"));
 				socket.emit("error",handle_error(err,"justnow"));
 			}else{
-				console.log("Executing else Part");
 				if(data.seed_detail_id==0){
-					SeedDetail.create(data.gid,function(seed_data){
+					SeedDetail.create(data.id,data.gid,function(seed_data){
 						User.set_new_seed(data.gid,seed_data.id,function(user_update){
 							if(user_update.changedRows==1){
 								message = {
@@ -101,26 +101,29 @@ function handle_just_now(err){
 }
 
 function process_new_bet(message){
+	User.bet(message,function(bet_results){
+        
+    })
 
-	User.find_by_gid(message.gid,function(data){
-		user_data = data;
+// 	User.find_by_gid(message.gid,function(data,err){
+// 		user_data = data;
 
-		console.log("processing new bet");
-		SeedDetail.create(1,function(result){
-			console.log(result);
-		});
-	// var pivot = dice.get_roll_pivot(message.chance,message.roll);
-	// console.log(pivot);
-	// console.log("Payout="+dice.calculate_payout(message.chance)+"X");
-	// var ss = Seed.create_server_seed();
-	// var cs = Seed.create_client_seed();
-	// var ssh = Seed.get_server_hash_by_seed(ss);
-	// console.log("seed:"+ss);
-	// console.log("client:"+cs);
-	// console.log("server-Hash:"+ssh);
-	// console.log("\n\n\n\n");
-	// Seed.roll(ssh,ss,cs,1,3);
-})
+// 		console.log("processing new bet");
+// 		SeedDetail.create(1,function(reseult){
+// 			console.log(result);
+// 		});
+// 	// var pivot = dice.get_roll_pivot(message.chance,message.roll);
+// 	// console.log(pivot);
+// 	// console.log("Payout="+dice.calculate_payout(message.chance)+"X");
+// 	// var ss = Seed.create_server_seed();
+// 	// var cs = Seed.create_client_seed();
+// 	// var ssh = Seed.get_server_hash_by_seed(ss);
+// 	// console.log("seed:"+ss);
+// 	// console.log("client:"+cs);
+// 	// console.log("server-Hash:"+ssh);
+// 	// console.log("\n\n\n\n");
+// 	// Seed.roll(ssh,ss,cs,1,3);
+// });
 }
 
 function process_randomize_seed(message){

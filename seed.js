@@ -26,7 +26,7 @@ Seed.get_server_hash_by_seed = function(seed){
 	return crypto.createHash('sha256').update(seed).digest("hex");
 }
 
-Seed.roll = function(ssh,ss,cs,sn,nb) {
+Seed.get_result = function(ssh,ss,cs,sn,nb) {
 	j = sn + nb - 1;
 	var gen = ""
 	var ss2;

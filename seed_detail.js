@@ -2,10 +2,10 @@ var SeedDetail = exports = module.exports = {};
 var db = require("./connect");
 var Seed = require("./seed");
 
-SeedDetail.create = function (user_id,callback){
-	console.log("goging to create\n\n");
-	db.query('INSERT INTO seed_details (user_id,server_seed,client_seed) VALUES (?,?,?);',
+SeedDetail.create = function (user_id,user_gid,callback){
+	db.query('INSERT INTO seed_details (user_id,user_gid,server_seed,client_seed) VALUES (?,?,?,?);',
 		[user_id,
+         user_gid,
 		Seed.create_server_seed(),
 		Seed.create_client_seed()],
 	 function(err, rows, fields) {

@@ -1,19 +1,20 @@
-var dice = exports = module.exports = {};
+var Dice = exports = module.exports = {};
 
-	dice.get_roll_pivot = function (chance,roll){
+	Dice.get_target = function (chance,roll){
+        chance  = parseInt(chance);
 		if(roll==="rhigh"){
 			return 99.999999-chance;
 		}else{
 			return chance;
 		}
-	}
+	};
 
-	dice.calculate_payout = function (chance){
+	Dice.calculate_payout = function (chance){
 		var house_edge = 1;
 		return (100-house_edge)/chance;
-	}
+	};
 
-	dice.calculate_profit = function (chance,bet){
+	Dice.calculate_profit = function (chance,bet){
 		return (calculate_payout(chance)-1)*bet;
-	}
+	};
 
