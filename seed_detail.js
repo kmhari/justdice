@@ -22,11 +22,11 @@ SeedDetail.find = function (id,callback){
 		if (err) {
 			console.log(err);
 			throw err;
-		}
+		}else
 		if(rows.length==0){
 			console.log("No seed detail by the id:"+id);
 			throw {err:"seed detail not found",id:id}
-		}
+		}else
 		callback(rows[0]);
 	}
 	)
