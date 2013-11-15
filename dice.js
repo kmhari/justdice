@@ -11,10 +11,10 @@ var Dice = exports = module.exports = {};
 
 	Dice.calculate_payout = function (chance){
 		var house_edge = 1;
-		return (100-house_edge)/chance;
+		return parseFloat((100-house_edge)/chance);
 	};
 
 	Dice.calculate_profit = function (chance,bet){
-		return (calculate_payout(chance)-1)*bet;
+		return parseFloat((Dice.calculate_payout(chance)-1)*bet);
 	};
 

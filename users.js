@@ -47,7 +47,7 @@ User.set_new_seed = function(gid,seed_detail_id,callback){
 
 User.bet = function(message,callback){
     User.fing_by_gid(message.gid,function(data,err){
-        Bet.get_next_nonce([data.id,data.seed_detail_id],function(nonce_data){
+        Bet.get_next_nonce([data.seed_detail_id,data.id],function(nonce_data){
             nonce_data++;
             SeedDetail.find(data.seed_detail_id,function(seed_data){
                 var roll = (message.roll=="rhigh")?"high":"low";
@@ -63,18 +63,28 @@ User.bet = function(message,callback){
                     won = result>target;
                 else 
                     won = result<target;
-                            
-                console.log(result+" "+((roll=="high")?">":"<")+target)
-                console.log((won)?"won":"lost");
-                console.log(won);
-                var profit = (won)?Dice.calculate_profit(message.bet,message.chance):-1*message.bet;
-                //user_id,seed_detail_id,roll,won,bet,payout,profit,chance,target,lucky,nonce
+                var profit = (won)?Dice.calculate_profit(message.chance,message.bet):parseFloat(-1*message.bet);
                 var bet_details = [data.id,data.seed_detail_id,roll,won,message.bet,payout,profit,message.chance,target,result,nonce_data];
+
                 Bet.create(bet_details,function(bet_result_data){
-                    console.log(bet_result_data);
+                    callback(bet_result_data);
                 })
             })
             
         })
 	});
 }
+
+User.user_point_add = function(id,amount,callback){
+   db.query('UPDATE users SET points = points + ? where id = ? ',[parseFloat(amount),id], function(err, rows, fields) {
+        if (err) {
+            console.log("User("+id+") point Add"+err);
+            throw err;
+        }else
+        callback(rows);
+    }); 
+}
+
+User.banker_point_add = function(amount,callback){
+    User.user_point_add(1,amount,callback);
+};
