@@ -102,7 +102,12 @@ function handle_just_now(err){
 
 function process_new_bet(message){
 	User.bet(message,function(bet_results){
-       console.log(bet_results); 
+		Bet.find(bet_results,function(bet_data){
+			bet_data["action"] = "my_bet";
+			io.sockets.emit("message",bet_data);
+			// console.log(bet_data); 
+		});
+       
     });
 }
 
