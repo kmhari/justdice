@@ -102,7 +102,10 @@ function handle_just_now(err) {
 }
 
 function process_new_bet(message, socket) {
-    User.bet(message, function (bet_results) {
+    User.bet(message, function (bet_results,err) {
+        if(err){
+            socket.emit("error",err);
+        }else
         Bet.find(bet_results["bet_result_data"], function (bet_data) {
             bet_data["action"] = "new_bet";
             io.sockets.emit("message", bet_data);

@@ -46,6 +46,9 @@ User.set_new_seed = function (gid, seed_detail_id, callback) {
 
 User.bet = function (message, callback) {
     User.fing_by_gid(message.gid, function (data, err) {
+        if(parseFloat(data.points)<message.bet){
+             callback(null,{err:2,message:"Insufficient Balance"})
+        }else
         Bet.get_next_nonce([data.seed_detail_id, data.id], function (nonce_data) {
             nonce_data++;
             SeedDetail.find(data.seed_detail_id, function (seed_data) {
