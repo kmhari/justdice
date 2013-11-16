@@ -2,22 +2,16 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="e23693b0-35b8-4afc-b7f3-f870d6f27174" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/invest.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app.js" afterPath="$PROJECT_DIR$/app.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bet.js" afterPath="$PROJECT_DIR$/bet.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/connect.js" afterPath="$PROJECT_DIR$/connect.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dice.js" afterPath="$PROJECT_DIR$/dice.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/error_code.js" afterPath="$PROJECT_DIR$/error_code.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/package.json" afterPath="$PROJECT_DIR$/package.json" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/seed.js" afterPath="$PROJECT_DIR$/seed.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/seed_detail.js" afterPath="$PROJECT_DIR$/seed_detail.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/users.js" afterPath="$PROJECT_DIR$/users.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/invest.js" afterPath="$PROJECT_DIR$/invest.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="gamble.iws" />
     <ignored path=".idea/workspace.xml" />
-    <file path="/Dummy.txt" changelist="e23693b0-35b8-4afc-b7f3-f870d6f27174" time="1384577863409" ignored="false" />
+    <file path="/Dummy.txt" changelist="e23693b0-35b8-4afc-b7f3-f870d6f27174" time="1384590488083" ignored="false" />
     <file path="/users.js" changelist="e23693b0-35b8-4afc-b7f3-f870d6f27174" time="1384578861334" ignored="false" />
-    <file path="/app.js" changelist="e23693b0-35b8-4afc-b7f3-f870d6f27174" time="1384583312971" ignored="false" />
+    <file path="/app.js" changelist="e23693b0-35b8-4afc-b7f3-f870d6f27174" time="1384591588915" ignored="false" />
+    <file path="/invest.js" changelist="e23693b0-35b8-4afc-b7f3-f870d6f27174" time="1384592136810" ignored="false" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -49,17 +43,19 @@
       <file leaf-file-name="app.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="35" column="47" selection-start="0" selection-end="3782" vertical-scroll-proportion="-6.6153846">
+            <state line="104" column="41" selection-start="3380" selection-end="3380" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="invest.js" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="invest.js" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/invest.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="9" column="66" selection-start="171" selection-end="171" vertical-scroll-proportion="0.0">
-              <folding />
+            <state line="9" column="0" selection-start="244" selection-end="244" vertical-scroll-proportion="0.09594883">
+              <folding>
+                <element signature="e#0#168#0" expanded="false" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -67,7 +63,7 @@
       <file leaf-file-name="users.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/users.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="16" column="9" selection-start="0" selection-end="3415" vertical-scroll-proportion="0.0">
+            <state line="8" column="40" selection-start="283" selection-end="283" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -76,7 +72,7 @@
       <file leaf-file-name="bet.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/bet.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="12" column="37" selection-start="0" selection-end="1684" vertical-scroll-proportion="0.0">
+            <state line="3" column="0" selection-start="115" selection-end="145" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -85,7 +81,7 @@
       <file leaf-file-name="connect.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/connect.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="9" column="37" selection-start="0" selection-end="190" vertical-scroll-proportion="0.0">
+            <state line="9" column="67" selection-start="190" selection-end="190" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -100,10 +96,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="package.json" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="package.json" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/package.json">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="11" column="21" selection-start="0" selection-end="309" vertical-scroll-proportion="0.3716216">
+            <state line="16" column="103" selection-start="309" selection-end="309" vertical-scroll-proportion="-10.0">
               <folding />
             </state>
           </provider>
@@ -121,7 +117,7 @@
       <file leaf-file-name="seed_detail.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/seed_detail.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="16" column="10" selection-start="0" selection-end="1058" vertical-scroll-proportion="0.0">
+            <state line="16" column="10" selection-start="175" selection-end="593" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -145,15 +141,15 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/invest.js" />
         <option value="$PROJECT_DIR$/dice.js" />
-        <option value="$PROJECT_DIR$/app.js" />
         <option value="$PROJECT_DIR$/bet.js" />
         <option value="$PROJECT_DIR$/error_code.js" />
         <option value="$PROJECT_DIR$/seed.js" />
         <option value="$PROJECT_DIR$/seed_detail.js" />
         <option value="$PROJECT_DIR$/users.js" />
         <option value="$PROJECT_DIR$/package.json" />
+        <option value="$PROJECT_DIR$/app.js" />
+        <option value="$PROJECT_DIR$/invest.js" />
       </list>
     </option>
   </component>
@@ -215,13 +211,13 @@
   <component name="PropertiesComponent">
     <property name="options.splitter.main.proportions" value="0.3" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="recentsLimit" value="5" />
     <property name="options.lastSelected" value="project.propVCSSupport.Mappings" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/app.js" />
+    <property name="recentsLimit" value="5" />
     <property name="restartRequiresConfirmation" value="true" />
-    <property name="GoToClass.includeJavaFiles" value="false" />
-    <property name="options.searchVisible" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/app.js" />
     <property name="options.splitter.details.proportions" value="0.2" />
+    <property name="options.searchVisible" value="true" />
+    <property name="GoToClass.includeJavaFiles" value="false" />
   </component>
   <component name="RunManager" selected="Node.js.Nodejs">
     <configuration default="true" type="DartUnitRunConfigurationType" factoryName="DartUnit">
@@ -276,22 +272,22 @@
     <frame x="10" y="29" width="1420" height="860" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.24982105" sideWeight="0.67027026" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.24982105" sideWeight="0.6716216" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32972974" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32972974" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32972974" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32837838" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
   <component name="VcsContentAnnotationSettings">
@@ -357,27 +353,6 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/invest.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="9" column="66" selection-start="171" selection-end="171" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/dice.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="12" column="36" selection-start="0" selection-end="470" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="35" column="47" selection-start="0" selection-end="3782" vertical-scroll-proportion="-6.6153846">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/bet.js">
       <provider selected="true" editor-type-id="text-editor">
         <state line="12" column="37" selection-start="0" selection-end="1684" vertical-scroll-proportion="0.0">
@@ -399,6 +374,13 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/package.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="11" column="21" selection-start="0" selection-end="309" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/seed.js">
       <provider selected="true" editor-type-id="text-editor">
         <state line="17" column="19" selection-start="0" selection-end="1396" vertical-scroll-proportion="0.0">
@@ -413,17 +395,75 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/users.js">
+    <entry file="file://$PROJECT_DIR$/dice.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="16" column="9" selection-start="0" selection-end="3415" vertical-scroll-proportion="0.0">
+        <state line="12" column="36" selection-start="0" selection-end="470" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/error_code.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="3" column="26" selection-start="0" selection-end="84" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/seed.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="17" column="19" selection-start="0" selection-end="1396" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/package.json">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="11" column="21" selection-start="0" selection-end="309" vertical-scroll-proportion="0.3716216">
+        <state line="16" column="103" selection-start="309" selection-end="309" vertical-scroll-proportion="-10.0">
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/connect.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="9" column="67" selection-start="190" selection-end="190" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/users.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="8" column="40" selection-start="283" selection-end="283" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/seed_detail.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="16" column="10" selection-start="175" selection-end="593" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="104" column="41" selection-start="3380" selection-end="3380" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/bet.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="3" column="0" selection-start="115" selection-end="145" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/invest.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="9" column="0" selection-start="244" selection-end="244" vertical-scroll-proportion="0.09594883">
+          <folding>
+            <element signature="e#0#168#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
