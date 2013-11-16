@@ -62,7 +62,8 @@ io.sockets.on('connection', function (socket) {
                                     "action": "seed_data",
                                     "ssh": Seed.get_server_hash_by_seed(seed_data.server_seed),
                                     "cs": seed_data.client_seed,
-                                    "nonce": 1
+                                    "nonce": 1,
+                                    "balance": data.points
                                 };
                                 socket.emit("message", message);
                             } else {
@@ -76,7 +77,8 @@ io.sockets.on('connection', function (socket) {
                             "action": "seed_data",
                             "ssh": Seed.get_server_hash_by_seed(seed_data.server_seed),
                             "cs": seed_data.client_seed,
-                            "nonce": 1
+                            "nonce": 1,
+                            "balance": data.points
                         };
                         socket.emit("message", message);
                     })
