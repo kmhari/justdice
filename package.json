@@ -11,6 +11,8 @@
         "socket.io": "*",
         "mysql": "*",
         "crypto": "*",
-        "memcached": "*"
+        "memcached": "*",
+        "hiredis": "*",
+        "redis": "*"
     }
 }
