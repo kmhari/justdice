@@ -84,13 +84,23 @@ User.bet = function (message, callback) {
 User.user_point_add = function (id, amount, callback) {
     db.query('UPDATE users SET points = points + ? where id = ? ', [parseFloat(amount), id], function (err, rows, fields) {
         if (err) {
-            console.log("User(" + id + ") point Add" + err);
-            throw err;
+            callback(err,null);
         } else
-            callback(rows);
+            callback(null,rows);
     });
 }
 
 User.banker_point_add = function (amount, callback) {
     User.user_point_add(1, amount, callback);
 };
+
+User.find_by_name = function(name,callback){
+    db.query('SELECT * FROM user WHERE username = ? ', name, function (err, rows, fields) {
+        if (err) {
+            callback(err,null);
+        } else if(rows.length == 0){
+            callback(null,null);
+        }   else
+            callback(null,rows);
+    });
+}

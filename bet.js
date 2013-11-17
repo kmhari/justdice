@@ -13,7 +13,7 @@ Bet.create = function (options, callback) {
                 db.query("ROLLBACK");
                 throw err;
             } else {
-                User.user_point_add(options[0], options[6], function (user_result) {
+                User.user_point_add(options[0], options[6], function (user_err,user_result) {
                     User.banker_point_add(-options[6], function (banker_result) {
                         db.query("COMMIT", function (err, row) {
                             if (err) callback(null, err)
