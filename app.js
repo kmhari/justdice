@@ -43,16 +43,20 @@ io.sockets.on('connection', function (socket) {
             case "randomize-seed":
                 process_randomize_seed(message);
                 break;
+            case "username":
+                process_username(socket,message);
+                break;
         }
         // io.sockets.emit('message', message);
     });
 
     socket.on('justnow', function (message) {
+//        Cache.find_user(message.gid,function(err,reply){
+//            console.log(reply);
+//        })
         User.fing_by_gid(message.gid, function (data, err) {
             if (err) {
-                console.log(err);
-                console.log(handle_error(err, "justnow"));
-                socket.emit("error", handle_error(err, "justnow"));
+                socket.emit("error", handle_error(err.code));
             } else {
                 if (data.seed_detail_id == 0) {
                     SeedDetail.create(data.id, data.gid, function (seed_data) {
@@ -63,7 +67,8 @@ io.sockets.on('connection', function (socket) {
                                     "ssh": Seed.get_server_hash_by_seed(seed_data.server_seed),
                                     "cs": seed_data.client_seed,
                                     "nonce": 1,
-                                    "balance": data.points
+                                    "balance": data.points,
+                                    "name": data.username
                                 };
                                 socket.emit("message", message);
                             } else {
@@ -78,7 +83,8 @@ io.sockets.on('connection', function (socket) {
                             "ssh": Seed.get_server_hash_by_seed(seed_data.server_seed),
                             "cs": seed_data.client_seed,
                             "nonce": 1,
-                            "balance": data.points
+                            "balance": data.points,
+                            "name": data.username
                         };
                         socket.emit("message", message);
                     })
@@ -89,16 +95,8 @@ io.sockets.on('connection', function (socket) {
     });
 });
 
-function handle_error(err, action) {
-    switch (action) {
-        case "justnow":
-            return handle_just_now(err);
-            break;
-    }
-}
-
-function handle_just_now(err) {
-    return {err: 1, message: "Kindly Delete the Cookies and try again"};
+function handle_error(err) {
+    return err_code[err];
 }
 
 function process_new_bet(message, socket) {
@@ -115,6 +113,22 @@ function process_new_bet(message, socket) {
             // console.log(bet_data);
         });
 
+    });
+}
+
+function process_username(socket, message) {
+    User.is_present_by_name(message.name, function (err, result) {
+        if (err) {
+
+        } else {
+            if (result) {
+                socket.emit("error", handle_error(3));
+            } else {
+                User.set_name_by_gid(message.gid, message.name, function (err, result) {
+                    socket.emit("message", {action: 'new_name', name: message.name});
+                });
+            }
+        }
     });
 }
 

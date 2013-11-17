@@ -95,12 +95,32 @@ User.banker_point_add = function (amount, callback) {
 };
 
 User.find_by_name = function(name,callback){
-    db.query('SELECT * FROM user WHERE username = ? ', name, function (err, rows, fields) {
+    db.query('SELECT * FROM users WHERE username = ? ', name, function (err, rows, fields) {
         if (err) {
             callback(err,null);
         } else if(rows.length == 0){
             callback(null,null);
         }   else
-            callback(null,rows);
+            callback(null,rows[0]);
+    });
+}
+
+User.is_present_by_name = function (name, callback) {
+    User.find_by_name(name, function (err, result) {
+        if (err == null && result == null) callback(err, false);
+        else callback(null, true);
+    });
+};
+
+
+User.set_name_by_gid = function (gid, name, callback) {
+    db.query('UPDATE users SET username = ? WHERE gid = ?', [name, gid], function (err, rows, fields) {
+        console.log(err,rows);
+        if (err) {
+            callback(err, null);
+        } else{
+            console.log(rows);
+            callback(null, rows);
+        }
     });
 }
