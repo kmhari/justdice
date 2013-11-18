@@ -18,7 +18,7 @@ User.find = function (id, callback) {
     )
 };
 
-User.fing_by_gid = function (gid, callback) {
+User.find_by_gid = function (gid, callback) {
     db.query('SELECT * FROM users where gid = ?', gid, function (err, rows, fields) {
             if (err) {
                 console.log(err);

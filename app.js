@@ -12,6 +12,8 @@ var dice = require('./dice');
 var User = require('./users');
 var SeedDetail = require('./seed_detail');
 var err_code = require("./error_code");
+var Chat = require("./chat");
+var Pool = require("./client");
 
 // all environments
 app.set('port', process.env.PORT || 8000);
@@ -26,12 +28,10 @@ if ('development' == app.get('env')) {
     app.use(express.errorHandler());
 }
 
-
-// connection.connect();
-
 var server = http.createServer(app);
 var io = socketio.listen(server);
 
+Chat.initialize(io);
 
 io.sockets.on('connection', function (socket) {
     socket.on('message', function (message) {
@@ -44,17 +44,40 @@ io.sockets.on('connection', function (socket) {
                 process_randomize_seed(message);
                 break;
             case "username":
-                process_username(socket,message);
+                process_username(socket, message);
                 break;
         }
         // io.sockets.emit('message', message);
+    });
+
+    socket.on('chat', function (message) {
+        User.find_by_gid(message.gid, function (data, err) {
+            console.log(data);
+            if (message.message.substring(0, 3) == "/pm") {
+
+                var pm = message.message.split(" ");
+                var to = pm[1];
+                if(!pm[1]) socket.emit("error",handle_error(5));
+                if(!pm[2]) socket.emit("error",handle_error(6));
+                pm.splice(0,2);
+                var text = pm.join(' ');
+                User.is_present_by_name(to, function (err,result) {
+                    if(result)
+                    Chat.addMessage(data.username, to, text);
+                    else
+                    socket.emit("error",handle_error(4));
+                });
+
+            } else
+                Chat.addMessage(data.username, null, message.message);
+        });
     });
 
     socket.on('justnow', function (message) {
 //        Cache.find_user(message.gid,function(err,reply){
 //            console.log(reply);
 //        })
-        User.fing_by_gid(message.gid, function (data, err) {
+        User.find_by_gid(message.gid, function (data, err) {
             if (err) {
                 socket.emit("error", handle_error(err.code));
             } else {
@@ -71,6 +94,8 @@ io.sockets.on('connection', function (socket) {
                                     "name": data.username
                                 };
                                 socket.emit("message", message);
+                                if (data.username)
+                                    Pool.add_client(socket, message.name, data.gid);
                             } else {
 
                             }
@@ -86,6 +111,8 @@ io.sockets.on('connection', function (socket) {
                             "balance": data.points,
                             "name": data.username
                         };
+                        if (data.username)
+                            Pool.add_client(socket, message.name, data.gid);
                         socket.emit("message", message);
                     })
                 }
@@ -100,18 +127,17 @@ function handle_error(err) {
 }
 
 function process_new_bet(message, socket) {
-    User.bet(message, function (bet_results,err) {
-        if(err){
-            socket.emit("error",err);
-        }else
-        Bet.find(bet_results["bet_result_data"], function (bet_data) {
-            bet_data["action"] = "new_bet";
-            io.sockets.emit("message", bet_data);
-            bet_data["action"] = "my_bet";
-            socket.emit("message", bet_data);
-            socket.emit("balance", bet_results["user_balance"]);
-            // console.log(bet_data);
-        });
+    User.bet(message, function (bet_results, err) {
+        if (err) {
+            socket.emit("error", err);
+        } else
+            Bet.find(bet_results["bet_result_data"], function (bet_data) {
+                bet_data["action"] = "new_bet";
+                io.sockets.emit("message", bet_data);
+                bet_data["action"] = "my_bet";
+                socket.emit("message", bet_data);
+                socket.emit("balance", bet_results["user_balance"]);
+            });
 
     });
 }
@@ -125,6 +151,7 @@ function process_username(socket, message) {
                 socket.emit("error", handle_error(3));
             } else {
                 User.set_name_by_gid(message.gid, message.name, function (err, result) {
+                    Pool.add_client(socket, message.name, message.gid);
                     socket.emit("message", {action: 'new_name', name: message.name});
                 });
             }
