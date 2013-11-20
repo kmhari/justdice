@@ -45,7 +45,7 @@ User.set_new_seed = function (gid, seed_detail_id, callback) {
 };
 
 User.bet = function (message, callback) {
-    User.fing_by_gid(message.gid, function (data, err) {
+    User.find_by_gid(message.gid, function (data, err) {
         if(parseFloat(data.points)<message.bet){
              callback(null,{err:2,message:"Insufficient Balance"})
         }else
@@ -124,3 +124,11 @@ User.set_name_by_gid = function (gid, name, callback) {
         }
     });
 }
+
+User.create = function (gid, callback) {
+    db.query('INSERT INTO users (points,gid) VALUES (100,?);',
+        gid,
+        function (err, rows, fields) {
+             callback(err,rows);
+        })
+};

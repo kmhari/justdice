@@ -1,0 +1,719 @@
+<html>
+<title>Gambit</title>
+<head>
+    
+    <link href="/bootstrap-responsive.css?body=1" media="all" rel="stylesheet" />
+    <link href="/bootstrap-responsive.min.css?body=1" media="all" rel="stylesheet" />
+    <link href="/bootstrap-theme.css?body=1" media="all" rel="stylesheet" />
+    <link href="/bootstrap-theme.min.css?body=1" media="all" rel="stylesheet" />
+    <link href="/bootstrap.css?body=1" media="all" rel="stylesheet" />
+    <link href="/bootstrap.min.css?body=1" media="all" rel="stylesheet" />
+    <link href="/docs.css?body=1" media="all" rel="stylesheet" />
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.2/js/bootstrap.min.js"></script>
+
+
+<style>
+
+    body .modal {
+        /* new custom width */
+        width: 60%;
+        height: 80%         ;
+        /* must be half of the width, minus scrollbar on the left (30px) */
+        margin-left: 20%;
+        left: 0%;
+    }
+
+    .chatline {
+        text-indent: -2em;
+        margin-left: 2em;
+        font-family: "courier new";
+    }
+
+    .chatscroll {
+        border: 1px solid black;
+        background: white;
+        overflow-y: scroll;
+        height: 320px;
+    }
+
+    .modal-body {
+        max-height: 500px;
+    }
+
+    .row {
+        margin-top: 20px;
+        margin-left: 0px;
+    }
+
+    .right {
+        text-align: right;
+    }
+
+    input[type=float]::-webkit-inner-spin-button,
+    input[type=float]::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+    .panel-title {
+        line-height: 10px;
+    }
+
+    .container {
+        width: 80%;
+    }
+
+    .number-show {
+        font-family: monospace;
+        padding: 2px 4px;
+        margin: 2px;
+        font-weight: bold;
+        background: #ccc;
+        border: 1px dashed #777;
+        border-radius: 12px;
+    }
+
+    @font-face {
+        font-family: "courier new";
+        src: url(/mycustomfont.ttf) format("truetype");
+    }
+</style>
+<script src="http://localhost:8000/socket.io/socket.io.js"></script>
+</head>
+<body>
+<div id="modal" class="modal">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h2>Invest or Divest</h2>
+    </div>
+    <div class="modal-body">
+
+        <h2>Invest</h2>
+
+        <div class="box">
+            <p>Lend some of your <span id="inv_balance" class="number-show">0.00000000</span> BTC balance to the site for
+                use as bankroll.</p>
+
+            <p>You get any gains the site makes (minus a 10% commission on net profits), but you also take any losses.</p>
+
+            <div class="pad">
+                <div class="row">
+                    <div class="span6">Increase investment? <input id="invest_input"> BTC</div>
+                    <button id="span3">invest</button>
+                </div>
+                <div class="row">
+                    <div class="span6"> ... or invest your whole balance:
+                        <button id="invest_all">invest all</button>
+                    </div>
+                </div>
+                <div class="clear"></div>
+                <div id="invest_error"></div>
+            </div>
+        </div>
+        <br>
+
+        <h2>Divest</h2>
+
+        <div class="box">
+            <div>Google tells me that 'divest' is the opposite of 'invest'. It's for getting your investment back into your
+                balance.
+            </div>
+            <div class="pad">
+                <div class="row">
+                    <div class="span6">Reduce investment? <input id="divest_input"> BTC</div>
+                    <button id="span3">divest</button>
+                </div>
+                <div class="row">
+                    <div class="span6"> ... or divest your whole balance:
+                        <button id="divest_all">divest all</button>
+                    </div>
+                </div>
+                <div class="clear"></div>
+                <div id="divest_error"></div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="span6"><p>You currently have <span class="investment number-show">0.00000000</span> BTC invested.</p>
+            </div>
+            <div class="span6">
+                <p>You are supplying <span class="invest_pct number-show">0.000000%</span> of the site's bankroll.</p></div>
+        </div>
+        <div class="clear"></div>
+
+    </div>
+
+</div>
+<div class="container">
+<legend>Welcome to Gambit</legend>
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">Bet</h3>
+    </div>
+    <div class="panel-body">
+        <div class="row">
+            <div class="span4">
+                <label class="span1">Chance:</label>
+
+                <div class="controls btn-group" style="margin: 0px">
+                    <button class="btn btn-success">min</button>
+                    <button class="btn minus">-1</button>
+                    <button class="btn plus">+1</button>
+                    <button class="btn btn-danger">max</button>
+                </div>
+            </div>
+            <div class="span4">
+                <label class="span1">Bet:</label>
+
+                <div class="controls btn-group" style="margin: 0px">
+                    <button class="btn btn-success">min</button>
+                    <button class="btn by2">/2</button>
+                    <button class="btn mul2">*2</button>
+                    <button class="btn btn-danger">max</button>
+                </div>
+            </div>
+            <!--</div>-->
+            <!--<div class="row">-->
+            <div class="span5">
+                <label class="span1">Action:</label>
+
+                <div class="controls btn-group" style="margin: 0px">
+                    <button class="btn">Deposit</button>
+                    <button class="btn">Widthdraw</button>
+                    <button class="btn">Randomize</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <h3 class="panel-title">Options</h3>
+    </div>
+    <div class="panel-body">
+        <div class="row">
+            <div class="span3">
+                <div class="input-group input-group-sm">
+                    <span class="input-group-addon">Chance to Win</span>
+                    <input type="float" class="form-control right" id="chanceToWin" placeholder="">
+                    <span class="input-group-addon">%</span>
+                </div>
+                <br>
+
+                <div class="input-group input-group-sm">
+                    <span class="input-group-addon">Payout</span>
+                    <input type="float" class="form-control right" id="payout" placeholder="">
+                    <span class="input-group-addon">X</span>
+                </div>
+            </div>
+
+
+            <div class="span3">
+                <div class="input-group input-group-sm">
+                    <span class="input-group-addon">Bet Size</span>
+                    <input type="float" class="form-control right" id="betSize" placeholder="">
+                    <span class="input-group-addon">Points</span>
+                </div>
+                <br>
+
+                <div class="input-group input-group-sm">
+                    <span class="input-group-addon">Profit</span>
+                    <input type="text" class="form-control right" id="profit" placeholder="">
+                    <span class="input-group-addon">Points</span>
+                </div>
+            </div>
+            <div class="span3">
+                <button class="btn" id="high">roll<br>hi<br><span id="rhigh"><12.00</span></button>
+                <button class="btn" id="low">roll<br>low<br><span id="rlow"><12.00</span></button>
+            </div>
+            <div class="span2">
+                <span class="">Balance</span>
+                <span class="label label-primary" id="my_balance">0.0000000</span>
+
+            </div>
+        </div>
+        <div class="row" id="alert">
+
+        </div>
+    </div>
+</div>
+
+<div class="row">
+<div class="tabbable"> <!-- Only required for left/right tabs -->
+<ul class="nav nav-tabs">
+    <li class="active"><a href="#tab1" data-toggle="tab">Bets</a></li>
+    <li><a href="#tab4" data-toggle="tab">My Bets</a></li>
+    <li><a href="#tab2" data-toggle="tab">Invest</a></li>
+    <li ><a href="#tab5" data-toggle="tab">Chat</a></li>
+    <li><a href="#tab3" data-toggle="tab">Fair?</a></li>
+</ul>
+<div class="tab-content">
+<div class="tab-pane" id="tab5">
+    <div id="chat_view" class="panel hide">
+        <div id="" class="panel-heading">
+            <h3 class="panel-title">Enter Chat</h3>
+        </div>
+        <div class="panel-body">
+            <div id="actual_chat" class="panel">
+                <div class="row">
+                    <div class="chatscroll">
+
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-group input-group-sm span10">
+                        <span class="input-group-addon">Type the message</span>
+                        <input type="text" class="form-control" placeholder="enter your message here" id="chat_message">
+          <span class="input-group-btn">
+            <button class="btn btn-default" id="send_message" type="button">Chat</button>
+          </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="panel" id="chat_new">
+        <div class="row">
+            <div class="input-group input-group-sm span6">
+                <span class="input-group-addon">Enter a name to start chatting</span>
+                <input type="text" class="form-control" placeholder="Username" id="username">
+          <span class="input-group-btn">
+            <button class="btn btn-default" id="start_chat" type="button">Chat</button>
+          </span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="tab-pane" id="tab4">
+    <p>All your bets come here</p>
+    <table class="table" id="myBets">
+        <thead>
+        <tr>
+            <th>BetId</th>
+            <th>Who</th>
+            <th>When</th>
+            <th>Lucky</th>
+            <th>Target</th>
+            <th>Bet</th>
+            <th>Payout</th>
+            <th>Profit</th>
+        </tr>
+        </thead>
+        <tbody>
+
+        </tbody>
+    </table>
+</div>
+<div class="tab-pane" id="tab1">
+    <p>All bets come here</p>
+    <table class="table" id="incommingBets">
+        <thead>
+        <tr>
+            <th>BetId</th>
+            <th>Who</th>
+            <th>When</th>
+            <th>Lucky</th>
+            <th>Target</th>
+            <th>Bet</th>
+            <th>Payout</th>
+            <th>Profit</th>
+        </tr>
+        </thead>
+        <tbody>
+
+        </tbody>
+    </table>
+</div>
+<div class="tab-pane" id="tab2">
+    <div id="invest" style="display: block;">
+        <div class="panel">
+            <div clas="row">
+                <div class="span5">
+                    <p>You currently have <span class="investment number-show">0.00000000</span> BTC invested.</p>
+                </div>
+                <div class="span1">
+                    <button id="invest_edit" class="btn" data-toggle="modal" data-target="#modal">edit</button>
+                </div>
+                <div class="span5 pull-right">
+                    <p>You are supplying <span class="invest_pct number-show">0.000000%</span> of the site's bankroll.</p>
+                </div>
+            </div>
+            <div class="clear"></div>
+            <legend>Be the Bank!</legend>
+
+            <p>You can invest some of your balance with the site for other players to bet against. This both increases
+                the maximum bets on the site, and you keep any profits made. You also 'keep' any losses.</p>
+
+            <p>Although we have a 1% house edge, and in the long run will earn a profit of 1% of the wagered amount, in
+                the short to medium term we can still lose money. In times when we are lucky, we win many bets and earn a
+                larger-than-expected profit, and in unlucky times we earn less than expected, and can even lose out. This
+                is especially so if someone comes in and makes a large number of massive bets; we can either gain a lot or
+                lose a lot.
+                <b>If you believe that the potential gains do not outweigh the potential losses, please do not invest.</b>
+            </p>
+
+            <p>Let's break it down: Suppose the total bankroll is currently made of 90 BTC from a single investor, and
+                you invest a further 10 BTC. You will have 10% of the new 'current bankroll', and the first investor's
+                share will drop from 100% to 90%. Each bet that a player makes is played against the current bankroll. As
+                players win and lose, your investment grows or shrinks by 10% of the overall house profit. When you
+                withdraw your investment you get 10% of the current bankroll. You may withdraw your investment at any
+                time. Other players' investments will affect the percentage of the current bankroll that your investment
+                represents. If a 3rd investor then invests another 100 BTC, bringing the total bankroll to 200 BTC, the
+                first investor's percentage drop from 90% to 45%, your percentage drops from 10% to 5%, and the new
+                investor's percentage is 50%. Then if a player loses 20 BTC to the site, everyone's investment grows in
+                proportion. Your 10 BTC investment is now 5% of the new bankroll (220 BTC) ie. 11 BTC.</p>
+
+            <p>On each bet, each player can profit by up to 0.5% of the house's bankroll. The maximum bet is dynamically
+                adjusted after each bet. Work is in progress to allow investors to set their own risk level. Perhaps you
+                want to risk up to 5% of your investment on each roll, not just 1%. At some point that may be available.
+                Originally the site allowed players to profit by up to 1% of the house's bankroll, but this figure was
+                reduced in an attempt to reduce volatility in the bankroll levels.</p>
+
+            <p>A simple example: The site's bankroll is 90 BTC. You invest 10 BTC, bringing the total bankroll up to 100
+                BTC. A player bets 1 BTC and loses. The total bankroll is now 101 BTC. You withdraw your investment, and
+                get 10.1 BTC. The site's bankroll is now 90.9 BTC.</p>
+
+            <p>Alternatively: You invest the same 10 BTC and the same player bets 1 BTC at a 2x multiplier and wins. The
+                total bankroll is now 99 BTC. Your investment is now only worth 9.9 BTC. You can withdraw it now and take
+                the loss, or wait for the law of large numbers to work in your favour. In the long run you can expect to
+                profit 1% of everything bet against your investment.</p>
+
+            <p>The site currently charges a 10% commission on net investment profits to cover expenses such as
+                advertising, server hosting, etc. The commission rate is subject to change. Notice will be given in this
+                paragraph 7 clear days before any rate change takes effect.</p>
+
+            <p>Commission is charged when profits are divested, or at midnight (UTC) on Sunday each week, whichever
+                happens sooner. Commission is never charged twice on the same profits. For example if you invest 100 BTC
+                and it grows to 110 BTC by the end of the first week, you will be charged 10% of your 10 BTC profit. If
+                your remaining 109 BTC investment then shrinks to 105 BTC over the next week, you will not be charged any
+                commission at the end of that week. And then, if it grows to 119 BTC by the end of the 3rd week, you will
+                only be charged 10% commission on the new 10 BTC of profit over the previous high of 109 BTC. At any point
+                you could divest up to your original investment of 100 BTC without being charged commission since we
+                consider that when divesting you divest the original investment first, and profits later.</p>
+
+            <p>Please help advertise the site. The more players we have, the faster your investment will grow. If you
+                have a BitcoinTalk.org forum account, please consider adding the following to your signature there:</p>
+
+            <div class="code">[size=14pt][font=Arial][b][glow=#6a6,2,300][url=https://just-dice.com][color=#fff]&nbsp;♦&nbsp;&nbsp;Just-Dice.com&nbsp;&nbsp;♦&nbsp;[/color][/url][/glow]&nbsp;&nbsp;[glow=#6a6,2,300][url=https://just-dice.com][color=#fff]&nbsp;♦&nbsp;&nbsp;1%
+                House Edge Dice Game&nbsp;&nbsp;♦&nbsp;[/color][/url][/glow]&nbsp;&nbsp;[glow=#6a6,2,300][url=https://just-dice.com][color=#fff]&nbsp;♦&nbsp;&nbsp;Play
+                or Invest&nbsp;&nbsp;♦&nbsp;[/color][/url][/glow][/b][/font][/size]
+            </div>
+            <p>To edit your BitcoinTalk signature, visit
+                <a href="https://bitcointalk.org/index.php?action=profile" target="_blank">https://bitcointalk.org/index.php?action=profile</a>
+                then click the "Forum Profile Information" link under "Modify Profile" in the top left. Copy/paste the
+                above code into the "Signature" box, and click "Change profile" at the bottom of the page to save the new
+                signature.</p></div>
+    </div>
+</div>
+<div class="tab-pane" id="tab3">
+    <div class="panel"><h3>Provable Fairness Overview</h3>
+
+        <p>This game is provably fair. What that means is that there is no way the site can cheat you by picking
+            numbers to make you lose. You can take our word for it, but for the crypto-nerds out there, here are the
+            gory details:</p>
+
+        <p>When you click 'randomize' in the top right we make up a secret random string (the server seed) that is
+            used to randomize the rolls. You are shown the hash of the server seed, and are asked to supply your own
+            random number (the client seed) to further randomize the rolls.</p>
+
+        <p>The sha256 hash of the server seed you are currently using is:</p>
+
+        <div class="monospace">
+            <span id="shash" class='number-show'></span>
+        </div>
+        <p></p>
+
+        <p>The client seed currently in use:</p>
+
+        <div class="monospace"><span id="seed" class="number-show"></span></div>
+        <p></p>
+
+        <p>and the number of bets you have made using it:</p>
+
+        <div class="monospace"><span id="nonce" class="number-show">0</span></div>
+        <p></p>
+
+        <p>Each time you roll, the server and client seeds are combined with the number of rolls you have made since
+            the seeds were selected to create the roll.</p>
+
+        <p>Notice that you are shown the hash of the server seed <em>before</em> picking your client seed. This
+            ensures that there is no way we can influence the numbers you will roll.</p>
+
+        <h3>Instant Verification with a Single Seed</h3>
+
+        <p>If you want to verify that we are not cheating you, click 'randomize' again to reveal the current server
+            seed and generate a new pair of seeds for future rolls.</p>
+
+        <p>In this way you can verify your rolls whenever you like, without having to wait for a daily secret to be
+            published, and you are safe from cheating without the need to set a different client seed for each bet you
+            make.</p>
+
+        <h3>Details</h3>
+        <h4>For bets :</h4>
+
+        <p>To generate your dice rolls, we string together your bet number, a colon, your client seed, a colon, and
+            your bet number.</p>
+
+        <p>For example, if your client seed is 1234567 and you are about to make your first roll since setting the
+            seed, we will use "1:1234567:1".</p>
+
+        <p>We do the same with the server seed: put your bet number before and after it, with a colon separator.</p>
+
+        <p>We then use the hmac-sha512() function to hash that string with the modified server seed. That gives us a
+            128 character hex string.</p><h4>For all bets:</h4>
+
+        <p>Note that the "bet number" in both the above cases is the number of bets you have made since your seeds
+            were selected, not the global server "bet ID" number.</p>
+
+        <p>We then take the first 5 characters of that hex string and convert them to a decimal integer (that will
+            be in the range 0 through 1048575 (16^5-1)).</p>
+
+        <p>If it is less than 1 million, we divide it by 10,000 and use it as your dice roll. That is the case 96%
+            of the time.</p>
+
+        <p>Otherwise we use the next five characters of the 128 character hex string, and repeat.</p>
+
+        <p>In the unlikely event that none of the 25 groups of five characters are lower than 1 million when
+            convered to decimal, we use the remaining 3 hex digits, which give a number in the range 0 through 4095,
+            which corresponds to a dice roll of 0.0000 through 0.4095.</p>
+
+        <h3>Verifier</h3>
+
+        <p>A few players on the site collaborated to create
+            <a target="_blank" href="http://bitcoinmaniac.com/justdice">a service which you can use</a> to verify your
+            rolled numbers. Copy the 3-line value from the 'randomize' window into the first input of that page and
+            click 'verify' for a list of the numbers you rolled, calculated independently of the site.</p></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<script>
+
+    var house_edge = 1;
+    var user_name = "";
+
+    function recalculate(id) {
+        var value = parseFloat($('#' + id).val());
+        switch (id) {
+            case "chanceToWin":
+                $('#payout').val(((100 - house_edge) / value).toFixed(5));
+                $('#profit').val((($('#payout').val() - 1) * $('#betSize').val()).toFixed(5));
+                $('#rlow').text("<" + String(parseFloat($('#' + id).val()).toFixed(5)));
+                $('#rhigh').text(">" + String((99.99999 - parseFloat($('#' + id).val())).toFixed(5)));
+
+                break;
+            case "payout":
+                $('#chanceToWin').val(((100 - house_edge) / value).toFixed(5));
+                $('#profit').val((($('#payout').val() - 1) * $('#betSize').val()).toFixed(5));
+                break;
+            case "betSize":
+                $('#profit').val((($('#payout').val() - 1) * value).toFixed(5));
+                break;
+            case "profit":
+                $('#betSize').val((value / ($('#payout').val() - 1)).toFixed(5));
+                break;
+        }
+    }
+    $('#chanceToWin,#betSize,#payout,#profit').bind('input', function (e) {
+        recalculate($(this).attr("id"), this.value);
+    })
+
+    $('#chanceToWin,#betSize,#payout,#profit').keypress(function (e) {
+        var charCode = e.keyCode;
+        if ((charCode > 31 && charCode != 46 && charCode != 8 && (charCode < 48 || charCode > 57))) {
+            return false;
+        }
+        return true;
+    })
+
+    $('.plus').mousedown(function () {
+        $('#chanceToWin').val(parseFloat($('#chanceToWin').val()) + 1);
+        recalculate('chanceToWin');
+    });
+
+    $('.minus').mousedown(function () {
+        $('#chanceToWin').val(parseFloat($('#chanceToWin').val()) - 1);
+        recalculate('chanceToWin');
+    });
+
+    $('.by2').mousedown(function () {
+        $('#betSize').val(parseFloat($('#betSize').val()) / 2);
+        recalculate('betSize');
+    });
+
+    $('.mul2').mousedown(function () {
+        $('#betSize').val(parseFloat($('#betSize').val()) * 2);
+        recalculate('betSize');
+    });
+
+    $('#chanceToWin').val(49.5);
+    $('#betSize').val("1");
+    recalculate("chanceToWin");
+    recalculate("betSize");
+
+</script>
+
+<script>
+    var current_user = "";
+    var bet_id_data = {};
+    $(document).ready(function () {
+        function getCookie(c_name) {
+            var c_value = document.cookie;
+            var c_start = c_value.indexOf(" " + c_name + "=");
+            if (c_start == -1) {
+                c_start = c_value.indexOf(c_name + "=");
+            }
+            if (c_start == -1) {
+                c_value = null;
+            }
+            else {
+                c_start = c_value.indexOf("=", c_start) + 1;
+                var c_end = c_value.indexOf(";", c_start);
+                if (c_end == -1) {
+                    c_end = c_value.length;
+                }
+                c_value = unescape(c_value.substring(c_start, c_end));
+            }
+            return c_value;
+        }
+
+        // IO
+        var socket = io.connect(document.location.protocol + '//' + document.location.hostname + ":8000");
+
+        $('#start_chat').click(function (event) {
+            socket.emit("message", {action: "username", gid: getCookie("gambit_guid"), name: $('#username').val()});
+        });
+
+        $('#send_message').click(function (event) {
+            socket.emit("chat", {gid: getCookie("gambit_guid"), name: $('#username').val(), message: $('#chat_message').val()});
+            $('#chat_message').val("");
+        });
+
+        $("#chat_message").keyup(function(event){
+            if(event.keyCode == 13){
+                $("#send_message").click();
+            }
+        });
+
+        // Ready
+        function my_bet(bet, is_my_bet) {
+            var str = '<tr class="' + (bet.won ? 'success' : 'danger') + '">'
+                    + '<td>BET' + bet.id + '</td>'
+                    + '<td>' + bet.user_id + '</td>'
+                    + '<td>' + bet.created_at + '</td>'
+                    + '<td>' + bet.lucky + '</td>'
+                    + '<td>' + ((bet.roll == "high") ? '>' : '<') + bet.target + '</td>'
+                    + '<td>' + bet.bet + '</td>'
+                    + '<td>' + bet.payout + '</td>'
+                    + '<td>' + bet.profit + '</td>'
+                    + '</tr>';
+            console.log(str);
+            if (is_my_bet)
+                $("#myBets tbody").prepend(str);
+            else
+                $("#incommingBets tbody").prepend(str);
+
+        }
+
+        var alert = $('#alert');
+        $(function () {
+            socket.on('message', function (message) {
+                switch (message.action) {
+                    case 'seed_data':
+                        alert.html('');
+                        $('#shash').text(message.ssh);
+                        $('#seed').text(message.cs);
+                        $('#nonce').text(message.nonce);
+                        $('#my_balance').html((message.balance).toFixed(7));
+                        if (message.name) {
+                            user_name = message.name;
+                            $('#chat_view').removeClass("hide");
+                            $('#chat_new').addClass("hide");
+                        }
+                        break;
+                    case 'new_bet':
+                        my_bet(message, 0);
+                        break;
+                    case 'new_name':
+                        alert.html('');
+                        user_name = message.name;
+                        $('#chat_view').removeClass("hide");
+                        $('#chat_new').addClass("hide");
+                        break;
+
+                    case 'my_bet':
+                        my_bet(message, 1);
+                        break;
+                    case "insuf_balance":
+                        alert.html('');
+                        alert.append('<div class="alert alert-danger bs-alert-old-docs span12">' + 'Insufficient balance' + '</div>');
+                        break;
+                }
+                console.log('received message:', message);
+            });
+
+            socket.on('connect', function (message) {
+                socket.emit('justnow', {gid: getCookie("gambit_guid")});
+            });
+
+            socket.on('balance', function (message) {
+                $('#my_balance').html((message).toFixed(7));
+            });
+
+            socket.on('chat', function (message) {
+                var chat = $('.chatscroll');
+                chat.append("<div class='chatline'><b>#"+message.from+":->&nbsp&nbsp</b>"+message.message+"</div>");
+                chat.scrollTop(chat.scrollTop()+100);
+            });
+
+            socket.on('error', function (error) {
+                console.log(error);
+                var alert = $('#alert');
+                alert.html('');
+                alert.append('<div class="alert alert-danger bs-alert-old-docs span12">' + error.message + '</div>');
+
+//                switch (error.error) {
+//                    case 1:
+//                        alert.append('<div class="alert alert-danger bs-alert-old-docs span12">' + 'Clear Cookies' + '</div>')
+//                        break;
+//                    case 2:
+//                        alert.append('<div class="alert alert-danger bs-alert-old-docs span12">' + 'Insufficient balance' + '</div>');
+//                        break;
+//                    case 3:
+//                        alert.append('<div class="alert alert-danger bs-alert-old-docs span12">' + 'Username not available' + '</div>');
+//                        break;
+//
+//                }
+            });
+            // Send Message
+            $('#high,#low').click(function (event) {
+                var alert = $('#alert');
+                if (parseFloat($('#my_balance').html()) < parseFloat($('#betSize').val())) {
+                    alert.html('');
+                    alert.append('<div class="alert alert-danger bs-alert-old-docs span12">' + 'Insufficient balance' + '</div>');
+                    return;
+                } else {
+                    alert.html('');
+                }
+                var message = {
+                    action: "new-bet",
+                    chance: $('#chanceToWin').val(),
+                    bet: $('#betSize').val(),
+                    roll: 'r' + $(this).attr("id"),
+                    gid: getCookie("gambit_guid")
+                };
+                console.log('send message:', message);
+                socket.emit('message', message);
+            });
+
+            socket.on('disconnect', function () {
+
+            });
+        });
+    })
+</script>
+</body>
+</html>

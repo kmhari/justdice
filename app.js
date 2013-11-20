@@ -14,14 +14,19 @@ var SeedDetail = require('./seed_detail');
 var err_code = require("./error_code");
 var Chat = require("./chat");
 var Pool = require("./client");
+var path = require("path");
+
+var ipaddr  = process.env.OPENSHIFT_NODEJS_IP || "127.0.0.1";
+var port    = process.env.OPENSHIFT_NODEJS_PORT || 8080;
 
 // all environments
 app.set('port', process.env.PORT || 8000);
 app.use(express.logger('dev'));
 app.use(express.json());
+app.use(express.cookieParser());
 app.use(express.urlencoded());
 app.use(express.methodOverride());
-// app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'public')));
 
 // development only
 if ('development' == app.get('env')) {
@@ -30,6 +35,19 @@ if ('development' == app.get('env')) {
 
 var server = http.createServer(app);
 var io = socketio.listen(server);
+
+app.get("/", function(req, res) {
+    console.log("\n\n\n\n\nCookies");
+    console.log(req.cookies);
+    if(!(req.cookies.gambit_guid)){
+        var gid = Seed.create_client_seed();
+        res.cookie('gambit_guid', gid);
+        User.create(gid,function(err,success){
+            res.redirect("/index2.html");
+        });
+    }else
+    res.redirect("/index2.html");
+});
 
 Chat.initialize(io);
 
@@ -77,6 +95,10 @@ io.sockets.on('connection', function (socket) {
 //        Cache.find_user(message.gid,function(err,reply){
 //            console.log(reply);
 //        })
+        console.log(message);
+        if(!message.gid){
+            socket.emit("error", handle_error(1));
+        }else
         User.find_by_gid(message.gid, function (data, err) {
             if (err) {
                 socket.emit("error", handle_error(err.code));
@@ -163,9 +185,7 @@ function process_randomize_seed(message) {
 
 }
 
-server.listen(app.get('port'), function () {
-    console.log('Express server listening on port ' + app.get('port'));
-});
+server.listen(ipaddr,port);
 
 
 function test() {

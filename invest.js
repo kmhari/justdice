@@ -21,4 +21,9 @@ Invest.create = function (user, amount, callback) {
 
 }
 
+Invest.calculate_profit = function(id){
+
+
+}
+
 
