@@ -79,7 +79,7 @@
         src: url(/mycustomfont.ttf) format("truetype");
     }
 </style>
-<script src="http://localhost:8000/socket.io/socket.io.js"></script>
+<script src="http://nodejs-gambit1.rhcloud.com/socket.io/socket.io.js"></script>
 </head>
 <body>
 <div id="modal" class="modal">
@@ -581,7 +581,7 @@
         }
 
         // IO
-        var socket = io.connect(document.location.protocol + '//' + document.location.hostname + ":8000");
+        var socket = io.connect("http://nodejs-gambit1.rhcloud.com/");
 
         $('#start_chat').click(function (event) {
             socket.emit("message", {action: "username", gid: getCookie("gambit_guid"), name: $('#username').val()});
