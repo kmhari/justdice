@@ -11,7 +11,7 @@ Pool.add_client = function (socket, name, gid) {
 
 Pool.del_client = function (gid) {
     delete client_sockets.gid;
-    User.find_by_gid(gid,function(data,err){
+    User.find_by_gid(gid,function(err, data){
         delete client_sockets_name.username;
     })
 };

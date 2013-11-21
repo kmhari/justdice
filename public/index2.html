@@ -9,77 +9,12 @@
     <link href="/bootstrap.css?body=1" media="all" rel="stylesheet"/>
     <link href="/bootstrap.min.css?body=1" media="all" rel="stylesheet"/>
     <link href="/docs.css?body=1" media="all" rel="stylesheet"/>
+    <link href="/gambit.css" media="all" rel="stylesheet"/>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
     <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.2/js/bootstrap.min.js"></script>
 
 
-    <style>
-
-        body .modal {
-            /* new custom width */
-            width: 60%;
-            height: 80%;
-            /* must be half of the width, minus scrollbar on the left (30px) */
-            margin-left: 20%;
-            left: 0%;
-        }
-
-        .chatline {
-            text-indent: -2em;
-            margin-left: 2em;
-            font-family: "courier new";
-        }
-
-        .chatscroll {
-            border: 1px solid black;
-            background: white;
-            overflow-y: scroll;
-            height: 320px;
-        }
-
-        .modal-body {
-            max-height: 500px;
-        }
-
-        .row {
-            margin-top: 20px;
-            margin-left: 0px;
-        }
-
-        .right {
-            text-align: right;
-        }
-
-        input[type=float]::-webkit-inner-spin-button,
-        input[type=float]::-webkit-outer-spin-button {
-            -webkit-appearance: none;
-            margin: 0;
-        }
-
-        .panel-title {
-            line-height: 10px;
-        }
-
-        .container {
-            width: 80%;
-        }
-
-        .number-show {
-            font-family: monospace;
-            padding: 2px 4px;
-            margin: 2px;
-            font-weight: bold;
-            background: #ccc;
-            border: 1px dashed #777;
-            border-radius: 12px;
-        }
-
-        @font-face {
-            font-family: "courier new";
-            src: url(/mycustomfont.ttf) format("truetype");
-        }
-    </style>
-    <script src="http://localhost:8000/socket.io/socket.io.js"></script>
+    <script src="http://localhost:1337/socket.io/socket.io.js"></script>
 </head>
 <body>
 <div id="modal" class="modal">
@@ -636,7 +571,7 @@
         }
 
         // IO
-        var socket = io.connect(document.location.protocol + '//' + document.location.hostname + ":8000");
+        var socket = io.connect(document.location.protocol + '//' + document.location.hostname + ":1337");
 
         $('#start_chat').click(function (event) {
             socket.emit("message", {action: "username", gid: getCookie("gambit_guid"), name: $('#username').val()});
@@ -653,6 +588,10 @@
             }
         });
 
+        function set_bal(val){
+            $('#my_balance').html((val).toFixed(7));
+            $('#inv_balance').html((val).toFixed(7));
+        }
         // Ready
         function my_bet(bet, is_my_bet) {
             var str = '<tr class="' + (bet.won ? 'success' : 'danger') + '">'
@@ -682,7 +621,8 @@
                         $('#shash').text(message.ssh);
                         $('#seed').text(message.cs);
                         $('#nonce').text(message.nonce);
-                        $('#my_balance').html((message.balance).toFixed(7));
+                        set_bal(message.balance);
+
                         if (message.name) {
                             user_name = message.name;
                             $('#chat_view').removeClass("hide");
@@ -715,7 +655,7 @@
             });
 
             socket.on('balance', function (message) {
-                $('#my_balance').html((message).toFixed(7));
+                set_bal(message);
             });
 
             socket.on('chat', function (message) {
@@ -726,22 +666,10 @@
 
             socket.on('error', function (error) {
                 console.log(error);
+                if(!error) return;
                 var alert = $('#alert');
                 alert.html('');
                 alert.append('<div class="alert alert-danger bs-alert-old-docs span12">' + error.message + '</div>');
-
-//                switch (error.error) {
-//                    case 1:
-//                        alert.append('<div class="alert alert-danger bs-alert-old-docs span12">' + 'Clear Cookies' + '</div>')
-//                        break;
-//                    case 2:
-//                        alert.append('<div class="alert alert-danger bs-alert-old-docs span12">' + 'Insufficient balance' + '</div>');
-//                        break;
-//                    case 3:
-//                        alert.append('<div class="alert alert-danger bs-alert-old-docs span12">' + 'Username not available' + '</div>');
-//                        break;
-//
-//                }
             });
             // Send Message
             $('#high,#low').click(function (event) {

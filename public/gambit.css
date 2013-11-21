@@ -1,0 +1,64 @@
+
+body .modal {
+    /* new custom width */
+    width: 60%;
+    height: 80%;
+    /* must be half of the width, minus scrollbar on the left (30px) */
+    margin-left: 20%;
+    left: 0%;
+}
+
+.chatline {
+    text-indent: -2em;
+    margin-left: 2em;
+    font-family: "courier new";
+}
+
+.chatscroll {
+    border: 1px solid black;
+    background: white;
+    overflow-y: scroll;
+    height: 320px;
+}
+
+.modal-body {
+    max-height: 500px;
+}
+
+.row {
+    margin-top: 20px;
+    margin-left: 0px;
+}
+
+.right {
+    text-align: right;
+}
+
+input[type=float]::-webkit-inner-spin-button,
+input[type=float]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.panel-title {
+    line-height: 10px;
+}
+
+.container {
+    width: 80%;
+}
+
+.number-show {
+    font-family: monospace;
+    padding: 2px 4px;
+    margin: 2px;
+    font-weight: bold;
+    background: #ccc;
+    border: 1px dashed #777;
+    border-radius: 12px;
+}
+
+@font-face {
+    font-family: "courier new";
+    src: url(/mycustomfont.ttf) format("truetype");
+}
