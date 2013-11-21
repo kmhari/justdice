@@ -46,7 +46,7 @@ app.get("/", function(req, res) {
             res.redirect("/index2.html");
         });
     }else
-    res.redirect("/index.html");
+    res.redirect("/index2.html");
 });
 
 Chat.initialize(io);
