@@ -1,85 +1,85 @@
 <html>
 <title>Gambit</title>
 <head>
-    
-    <link href="/bootstrap-responsive.css?body=1" media="all" rel="stylesheet" />
-    <link href="/bootstrap-responsive.min.css?body=1" media="all" rel="stylesheet" />
-    <link href="/bootstrap-theme.css?body=1" media="all" rel="stylesheet" />
-    <link href="/bootstrap-theme.min.css?body=1" media="all" rel="stylesheet" />
-    <link href="/bootstrap.css?body=1" media="all" rel="stylesheet" />
-    <link href="/bootstrap.min.css?body=1" media="all" rel="stylesheet" />
-    <link href="/docs.css?body=1" media="all" rel="stylesheet" />
+
+    <link href="/bootstrap-responsive.css?body=1" media="all" rel="stylesheet"/>
+    <link href="/bootstrap-responsive.min.css?body=1" media="all" rel="stylesheet"/>
+    <link href="/bootstrap-theme.css?body=1" media="all" rel="stylesheet"/>
+    <link href="/bootstrap-theme.min.css?body=1" media="all" rel="stylesheet"/>
+    <link href="/bootstrap.css?body=1" media="all" rel="stylesheet"/>
+    <link href="/bootstrap.min.css?body=1" media="all" rel="stylesheet"/>
+    <link href="/docs.css?body=1" media="all" rel="stylesheet"/>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
     <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.2/js/bootstrap.min.js"></script>
 
 
-<style>
+    <style>
 
-    body .modal {
-        /* new custom width */
-        width: 60%;
-        height: 80%         ;
-        /* must be half of the width, minus scrollbar on the left (30px) */
-        margin-left: 20%;
-        left: 0%;
-    }
+        body .modal {
+            /* new custom width */
+            width: 60%;
+            height: 80%;
+            /* must be half of the width, minus scrollbar on the left (30px) */
+            margin-left: 20%;
+            left: 0%;
+        }
 
-    .chatline {
-        text-indent: -2em;
-        margin-left: 2em;
-        font-family: "courier new";
-    }
+        .chatline {
+            text-indent: -2em;
+            margin-left: 2em;
+            font-family: "courier new";
+        }
 
-    .chatscroll {
-        border: 1px solid black;
-        background: white;
-        overflow-y: scroll;
-        height: 320px;
-    }
+        .chatscroll {
+            border: 1px solid black;
+            background: white;
+            overflow-y: scroll;
+            height: 320px;
+        }
 
-    .modal-body {
-        max-height: 500px;
-    }
+        .modal-body {
+            max-height: 500px;
+        }
 
-    .row {
-        margin-top: 20px;
-        margin-left: 0px;
-    }
+        .row {
+            margin-top: 20px;
+            margin-left: 0px;
+        }
 
-    .right {
-        text-align: right;
-    }
+        .right {
+            text-align: right;
+        }
 
-    input[type=float]::-webkit-inner-spin-button,
-    input[type=float]::-webkit-outer-spin-button {
-        -webkit-appearance: none;
-        margin: 0;
-    }
+        input[type=float]::-webkit-inner-spin-button,
+        input[type=float]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
 
-    .panel-title {
-        line-height: 10px;
-    }
+        .panel-title {
+            line-height: 10px;
+        }
 
-    .container {
-        width: 80%;
-    }
+        .container {
+            width: 80%;
+        }
 
-    .number-show {
-        font-family: monospace;
-        padding: 2px 4px;
-        margin: 2px;
-        font-weight: bold;
-        background: #ccc;
-        border: 1px dashed #777;
-        border-radius: 12px;
-    }
+        .number-show {
+            font-family: monospace;
+            padding: 2px 4px;
+            margin: 2px;
+            font-weight: bold;
+            background: #ccc;
+            border: 1px dashed #777;
+            border-radius: 12px;
+        }
 
-    @font-face {
-        font-family: "courier new";
-        src: url(/mycustomfont.ttf) format("truetype");
-    }
-</style>
-<script src="http://localhost:8000/socket.io/socket.io.js"></script>
+        @font-face {
+            font-family: "courier new";
+            src: url(/mycustomfont.ttf) format("truetype");
+        }
+    </style>
+    <script src="http://localhost:8000/socket.io/socket.io.js"></script>
 </head>
 <body>
 <div id="modal" class="modal">
@@ -92,10 +92,12 @@
         <h2>Invest</h2>
 
         <div class="box">
-            <p>Lend some of your <span id="inv_balance" class="number-show">0.00000000</span> BTC balance to the site for
+            <p>Lend some of your <span id="inv_balance" class="number-show">0.00000000</span> BTC balance to the site
+                for
                 use as bankroll.</p>
 
-            <p>You get any gains the site makes (minus a 10% commission on net profits), but you also take any losses.</p>
+            <p>You get any gains the site makes (minus a 10% commission on net profits), but you also take any
+                losses.</p>
 
             <div class="pad">
                 <div class="row">
@@ -116,7 +118,8 @@
         <h2>Divest</h2>
 
         <div class="box">
-            <div>Google tells me that 'divest' is the opposite of 'invest'. It's for getting your investment back into your
+            <div>Google tells me that 'divest' is the opposite of 'invest'. It's for getting your investment back into
+                your
                 balance.
             </div>
             <div class="pad">
@@ -134,12 +137,53 @@
             </div>
         </div>
         <div class="row">
-            <div class="span6"><p>You currently have <span class="investment number-show">0.00000000</span> BTC invested.</p>
+            <div class="span6"><p>You currently have <span class="investment number-show">0.00000000</span> BTC
+                invested.</p>
             </div>
             <div class="span6">
-                <p>You are supplying <span class="invest_pct number-show">0.000000%</span> of the site's bankroll.</p></div>
+                <p>You are supplying <span class="invest_pct number-show">0.000000%</span> of the site's bankroll.</p>
+            </div>
         </div>
         <div class="clear"></div>
+
+    </div>
+
+</div>
+<div id="modalr" class="modal">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h2>Invest or Divest</h2>
+    </div>
+    <div class="modal-body">
+
+        <div><h2>Randomize Your Rolls</h2>
+
+            <p>The last server seed was:</p>
+
+            <div id="old_sseed" class="monospace number-show">7pyGqC7VvOdipBaIAvVW52hHGk20RM6szsSGIx9_G6TskRWhnGzMK.0GIwFjbqOX</div>
+            <p>The last server seed hash was:</p>
+
+            <div id="old_shash" class="monospace number-show">3163fa40fdd0827ede392b9e16648b1cbcf1c2f89a52e80cf4297cb83fe8c713</div>
+            <p>Your client seed for that server seed was:</p>
+
+            <div id="old_cseed" class="monospace number-show">164907815640242340165576</div>
+            <p>The number of rolls you made with the last pair of seeds was:</p>
+
+            <div id="old_nonce" class="monospace number-show">0</div>
+
+            <div id="new_shash" class="monospace">9f20c0bd6b70eacad4cb3baeb450c656686841e179100c6b857f52bd8e26f19d</div>
+            <p class="important">Type up to 24 random digits (0 through 9) to re-randomize with your own seed:</p>
+
+            <div class="input_ok">
+                <div class="input_ok_input"><input id="new_cseed" class="seed_input" size="24" maxlength="24"
+                                                   value="062843368122389680933683"></div>
+                <div class="fleft indent">
+                    <button class="seed_button">ok</button>
+                </div>
+                <div class="clear"></div>
+            </div>
+            <div class="important" id="form_error"></div>
+        </div>
 
     </div>
 
@@ -180,7 +224,7 @@
                 <div class="controls btn-group" style="margin: 0px">
                     <button class="btn">Deposit</button>
                     <button class="btn">Widthdraw</button>
-                    <button class="btn">Randomize</button>
+                    <button class="btn"  data-toggle="modal" data-target="#modalr">Randomize</button>
                 </div>
             </div>
         </div>
@@ -245,7 +289,7 @@
     <li class="active"><a href="#tab1" data-toggle="tab">Bets</a></li>
     <li><a href="#tab4" data-toggle="tab">My Bets</a></li>
     <li><a href="#tab2" data-toggle="tab">Invest</a></li>
-    <li ><a href="#tab5" data-toggle="tab">Chat</a></li>
+    <li><a href="#tab5" data-toggle="tab">Chat</a></li>
     <li><a href="#tab3" data-toggle="tab">Fair?</a></li>
 </ul>
 <div class="tab-content">
@@ -337,7 +381,8 @@
                     <button id="invest_edit" class="btn" data-toggle="modal" data-target="#modal">edit</button>
                 </div>
                 <div class="span5 pull-right">
-                    <p>You are supplying <span class="invest_pct number-show">0.000000%</span> of the site's bankroll.</p>
+                    <p>You are supplying <span class="invest_pct number-show">0.000000%</span> of the site's bankroll.
+                    </p>
                 </div>
             </div>
             <div class="clear"></div>
@@ -347,16 +392,21 @@
                 the maximum bets on the site, and you keep any profits made. You also 'keep' any losses.</p>
 
             <p>Although we have a 1% house edge, and in the long run will earn a profit of 1% of the wagered amount, in
-                the short to medium term we can still lose money. In times when we are lucky, we win many bets and earn a
-                larger-than-expected profit, and in unlucky times we earn less than expected, and can even lose out. This
-                is especially so if someone comes in and makes a large number of massive bets; we can either gain a lot or
+                the short to medium term we can still lose money. In times when we are lucky, we win many bets and earn
+                a
+                larger-than-expected profit, and in unlucky times we earn less than expected, and can even lose out.
+                This
+                is especially so if someone comes in and makes a large number of massive bets; we can either gain a lot
+                or
                 lose a lot.
-                <b>If you believe that the potential gains do not outweigh the potential losses, please do not invest.</b>
+                <b>If you believe that the potential gains do not outweigh the potential losses, please do not
+                    invest.</b>
             </p>
 
             <p>Let's break it down: Suppose the total bankroll is currently made of 90 BTC from a single investor, and
                 you invest a further 10 BTC. You will have 10% of the new 'current bankroll', and the first investor's
-                share will drop from 100% to 90%. Each bet that a player makes is played against the current bankroll. As
+                share will drop from 100% to 90%. Each bet that a player makes is played against the current bankroll.
+                As
                 players win and lose, your investment grows or shrinks by 10% of the overall house profit. When you
                 withdraw your investment you get 10% of the current bankroll. You may withdraw your investment at any
                 time. Other players' investments will affect the percentage of the current bankroll that your investment
@@ -376,7 +426,8 @@
                 get 10.1 BTC. The site's bankroll is now 90.9 BTC.</p>
 
             <p>Alternatively: You invest the same 10 BTC and the same player bets 1 BTC at a 2x multiplier and wins. The
-                total bankroll is now 99 BTC. Your investment is now only worth 9.9 BTC. You can withdraw it now and take
+                total bankroll is now 99 BTC. Your investment is now only worth 9.9 BTC. You can withdraw it now and
+                take
                 the loss, or wait for the law of large numbers to work in your favour. In the long run you can expect to
                 profit 1% of everything bet against your investment.</p>
 
@@ -387,9 +438,12 @@
             <p>Commission is charged when profits are divested, or at midnight (UTC) on Sunday each week, whichever
                 happens sooner. Commission is never charged twice on the same profits. For example if you invest 100 BTC
                 and it grows to 110 BTC by the end of the first week, you will be charged 10% of your 10 BTC profit. If
-                your remaining 109 BTC investment then shrinks to 105 BTC over the next week, you will not be charged any
-                commission at the end of that week. And then, if it grows to 119 BTC by the end of the 3rd week, you will
-                only be charged 10% commission on the new 10 BTC of profit over the previous high of 109 BTC. At any point
+                your remaining 109 BTC investment then shrinks to 105 BTC over the next week, you will not be charged
+                any
+                commission at the end of that week. And then, if it grows to 119 BTC by the end of the 3rd week, you
+                will
+                only be charged 10% commission on the new 10 BTC of profit over the previous high of 109 BTC. At any
+                point
                 you could divest up to your original investment of 100 BTC without being charged commission since we
                 consider that when divesting you divest the original investment first, and profits later.</p>
 
@@ -403,7 +457,8 @@
             <p>To edit your BitcoinTalk signature, visit
                 <a href="https://bitcointalk.org/index.php?action=profile" target="_blank">https://bitcointalk.org/index.php?action=profile</a>
                 then click the "Forum Profile Information" link under "Modify Profile" in the top left. Copy/paste the
-                above code into the "Signature" box, and click "Change profile" at the bottom of the page to save the new
+                above code into the "Signature" box, and click "Change profile" at the bottom of the page to save the
+                new
                 signature.</p></div>
     </div>
 </div>
@@ -592,8 +647,8 @@
             $('#chat_message').val("");
         });
 
-        $("#chat_message").keyup(function(event){
-            if(event.keyCode == 13){
+        $("#chat_message").keyup(function (event) {
+            if (event.keyCode == 13) {
                 $("#send_message").click();
             }
         });
@@ -665,8 +720,8 @@
 
             socket.on('chat', function (message) {
                 var chat = $('.chatscroll');
-                chat.append("<div class='chatline'><b>#"+message.from+":->&nbsp&nbsp</b>"+message.message+"</div>");
-                chat.scrollTop(chat.scrollTop()+100);
+                chat.append("<div class='chatline'><b>#" + message.from + ":->&nbsp&nbsp</b>" + message.message + "</div>");
+                chat.scrollTop(chat.scrollTop() + 100);
             });
 
             socket.on('error', function (error) {
