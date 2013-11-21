@@ -7,7 +7,18 @@ var lastAccessed = 0;
 var char_history = {};
 var io;
 
+function htmlEscape(str) {
+    return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
+}
+
+
 Chat.addMessage = function (from, to, message) {
+    message = htmlEscape(message);
     if (to == null) {
         io.sockets.emit("chat", {from: from, message: message, private: false});
     } else {
