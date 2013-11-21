@@ -17,7 +17,7 @@ var Pool = require("./client");
 var path = require("path");
 
 var ipaddr  = process.env.OPENSHIFT_NODEJS_IP || "127.0.0.1";
-var port    = process.env.OPENSHIFT_NODEJS_PORT || 1337;
+var port    = process.env.OPENSHIFT_NODEJS_PORT || 8080;
 
 // all environments
 app.set('port', process.env.PORT || 8000);
@@ -69,7 +69,7 @@ io.sockets.on('connection', function (socket) {
     });
 
     socket.on('chat', function (message) {
-        User.find_by_gid(message.gid, function (err, data) {
+        User.find_by_gid(message.gid, function (data, err) {
             console.log(data);
             if (message.message.substring(0, 3) == "/pm") {
 
@@ -99,7 +99,7 @@ io.sockets.on('connection', function (socket) {
         if(!message.gid){
             socket.emit("error", handle_error(1));
         }else
-        User.find_by_gid(message.gid, function (err, data) {
+        User.find_by_gid(message.gid, function (data, err) {
             if (err) {
                 socket.emit("error", handle_error(err.code));
             } else {
@@ -185,7 +185,7 @@ function process_randomize_seed(message) {
 
 }
 
-server.listen(port,ipaddr);
+server.listen(ipaddr,port);
 
 
 function test() {
