@@ -91,11 +91,15 @@ io.sockets.on('connection', function (socket) {
         });
     });
 
+    function send_last_bets(socket,id){
+        Bet.get_last_n_bets(30,function(err,rows){
+           socket.emit("message",{action:"old_bet",bets:rows});
+        });
+        Bet.get_last_n_bets_by_id(30,id,function(){
+
+        });
+    }
     socket.on('justnow', function (message) {
-//        Cache.find_user(message.gid,function(err,reply){
-//            console.log(reply);
-//        })
-        console.log(message);
         if(!message.gid){
             socket.emit("error", handle_error(1));
         }else
@@ -116,6 +120,8 @@ io.sockets.on('connection', function (socket) {
                                     "name": data.username
                                 };
                                 socket.emit("message", message);
+                                send_last_bets(socket,data.id);
+
                                 if (data.username)
                                     Pool.add_client(socket, message.name, data.gid);
                             } else {
@@ -136,6 +142,7 @@ io.sockets.on('connection', function (socket) {
                         if (data.username)
                             Pool.add_client(socket, message.name, data.gid);
                         socket.emit("message", message);
+                        send_last_bets(socket,data.id);
                     })
                 }
             }

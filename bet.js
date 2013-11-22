@@ -13,7 +13,7 @@ Bet.create = function (options, callback) {
                 db.query("ROLLBACK");
                 throw err;
             } else {
-                User.user_point_add(options[0], options[6], function (user_err,user_result) {
+                User.user_point_add(options[0], options[6], function (user_err, user_result) {
                     User.banker_point_add(-options[6], function (banker_result) {
                         db.query("COMMIT", function (err, row) {
                             if (err) callback(null, err)
@@ -46,6 +46,18 @@ Bet.find = function (id, callback) {
             callback(rows[0]);
     });
 };
+
+Bet.get_last_n_bets_by_id = function (n, id, callback) {
+    db.query("SELECT * FROM bets WHERE user_id = ? ORDER BY id DESC LIMIT ? ", [id, n], function (err, rows, fields) {
+        callback(err, rows);
+    });
+}
+
+Bet.get_last_n_bets = function (n, callback) {
+    db.query("SELECT * FROM bets ORDER BY id DESC LIMIT ? ", n, function (err, rows, fields) {
+        callback(err, rows);
+    });
+}
 
 
 

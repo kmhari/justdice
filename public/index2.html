@@ -632,6 +632,12 @@
                     case 'new_bet':
                         my_bet(message, 0);
                         break;
+                    case 'old_bet':
+                        $.each(message.bets,function(key,bet){
+                            my_bet(bet, 0);
+                        })
+
+                        break;
                     case 'new_name':
                         alert.html('');
                         user_name = message.name;
