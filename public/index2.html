@@ -10,8 +10,8 @@
     <link href="/bootstrap.min.css?body=1" media="all" rel="stylesheet"/>
     <link href="/docs.css?body=1" media="all" rel="stylesheet"/>
     <link href="/gambit.css" media="all" rel="stylesheet"/>
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-    <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.2/js/bootstrap.min.js"></script>
+    <script src="/jquery.min.js"></script>
+    <script src="/bootstrap.min.js"></script>
 
 
     <script src="http://localhost:1337/socket.io/socket.io.js"></script>
@@ -23,6 +23,9 @@
         <h2>Invest or Divest</h2>
     </div>
     <div class="modal-body">
+        <div class="row" id="invest-alert">
+
+        </div>
 
         <h2>Invest</h2>
 
@@ -36,12 +39,12 @@
 
             <div class="pad">
                 <div class="row">
-                    <div class="span6">Increase investment? <input id="invest_input"> BTC</div>
-                    <button id="span3">invest</button>
+                    <div class="span6">Increase investment? <input type="text" id="invest_input"> BTC</div>
+                    <button class="btn" id="invest_few">invest</button>
                 </div>
                 <div class="row">
                     <div class="span6"> ... or invest your whole balance:
-                        <button id="invest_all">invest all</button>
+                        <button class="btn" id="invest_all">invest all</button>
                     </div>
                 </div>
                 <div class="clear"></div>
@@ -549,29 +552,31 @@
 <script>
     var current_user = "";
     var bet_id_data = {};
-    $(document).ready(function () {
-        function getCookie(c_name) {
-            var c_value = document.cookie;
-            var c_start = c_value.indexOf(" " + c_name + "=");
-            if (c_start == -1) {
-                c_start = c_value.indexOf(c_name + "=");
-            }
-            if (c_start == -1) {
-                c_value = null;
-            }
-            else {
-                c_start = c_value.indexOf("=", c_start) + 1;
-                var c_end = c_value.indexOf(";", c_start);
-                if (c_end == -1) {
-                    c_end = c_value.length;
-                }
-                c_value = unescape(c_value.substring(c_start, c_end));
-            }
-            return c_value;
+    var socket;
+    var set_bal;
+    function getCookie(c_name) {
+        var c_value = document.cookie;
+        var c_start = c_value.indexOf(" " + c_name + "=");
+        if (c_start == -1) {
+            c_start = c_value.indexOf(c_name + "=");
         }
+        if (c_start == -1) {
+            c_value = null;
+        }
+        else {
+            c_start = c_value.indexOf("=", c_start) + 1;
+            var c_end = c_value.indexOf(";", c_start);
+            if (c_end == -1) {
+                c_end = c_value.length;
+            }
+            c_value = unescape(c_value.substring(c_start, c_end));
+        }
+        return c_value;
+    }
 
+    $(document).ready(function () {
         // IO
-        var socket = io.connect(document.location.protocol + '//' + document.location.hostname + ":1337");
+        socket = io.connect(document.location.protocol + '//' + document.location.hostname + ":1337");
 
         $('#start_chat').click(function (event) {
             socket.emit("message", {action: "username", gid: getCookie("gambit_guid"), name: $('#username').val()});
@@ -588,7 +593,7 @@
             }
         });
 
-        function set_bal(val){
+        set_bal = function(val){
             $('#my_balance').html((val).toFixed(7));
             $('#inv_balance').html((val).toFixed(7));
         }
@@ -654,7 +659,7 @@
                         break;
                     case "insuf_balance":
                         alert.html('');
-                        alert.append('<div class="alert alert-danger bs-alert-old-docs span12">' + 'Insufficient balance' + '</div>');
+                        alert.append('<div class="alert alert-danger bs-alert-old-docs span3">' + 'Insufficient balance' + '</div>');
                         break;
                 }
                 console.log('received message:', message);
@@ -677,9 +682,10 @@
             socket.on('error', function (error) {
                 console.log(error);
                 if(!error) return;
-                var alert = $('#alert');
+                var alert = $('#'+error.display);
                 alert.html('');
-                alert.append('<div class="alert alert-danger bs-alert-old-docs span12">' + error.message + '</div>');
+                alert.append('<div class="alert alert-danger bs-alert-old-docs span6">' + error.message + '</div>');
+                alert.show().delay(5000).fadeOut();
             });
             // Send Message
             $('#high,#low').click(function (event) {
@@ -708,5 +714,6 @@
         });
     })
 </script>
+<script src="gambit.js"></script>
 </body>
 </html>

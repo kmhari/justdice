@@ -47,7 +47,7 @@ User.set_new_seed = function (gid, seed_detail_id, callback) {
 User.bet = function (message, callback) {
     User.find_by_gid(message.gid, function (err, data) {
         if (parseFloat(data.points) < message.bet) {
-            callback(null, {err: 2, message: "Insufficient Balance"})
+            callback(null, {err: 2, message: "Insufficient Balance in:User.bet"})
         } else
             Bet.get_next_nonce([data.seed_detail_id, data.id], function (nonce_data) {
                 nonce_data++;
@@ -92,10 +92,11 @@ User.user_point_add = function (id, amount, callback) {
 
 User.transfer = function (from, to, amount, callback) {
     User.find(from, function (err, data) {
+        console.log("\n\n\n\n",amount,data,"\n\n\n");
         if (err) {
             console.log(err);
             callback({err: "Unknown User", code: 1}, null);
-        } else if (amount > data.points) {
+        } else if (amount < data.points) {
             User.user_point_add(from, -amount, function (err, from_data) {
                 if (err) {
                     callback({err: err, code: -1}, null);
@@ -104,7 +105,7 @@ User.transfer = function (from, to, amount, callback) {
                         if (err) {
                             callback({err: err, code: -1}, null);
                         } else {
-                            callback(null, {from: from_data, to: to_data});
+                            callback(null, {from: from_data, to: to_data,info:data});
                         }
 
 
@@ -112,7 +113,7 @@ User.transfer = function (from, to, amount, callback) {
                 }
             });
         } else {
-            callback({err: "Insufficient Balance", code: 2}, null);
+            callback({err: "Insufficient Balance in:User:transfer", code: 2}, null);
         }
     });
 }

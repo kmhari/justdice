@@ -14,6 +14,7 @@ var SeedDetail = require('./seed_detail');
 var err_code = require("./error_code");
 var Chat = require("./chat");
 var Pool = require("./client");
+var Invest = require("./invest");
 var path = require("path");
 
 var ipaddr  = process.env.OPENSHIFT_NODEJS_IP || "127.0.0.1";
@@ -51,7 +52,9 @@ app.get("/", function(req, res) {
 
 Chat.initialize(io);
 
+
 io.sockets.on('connection', function (socket) {
+    Invest.initialize(socket);
     socket.on('message', function (message) {
 //		console.log('received message:', message);
         switch (message.action) {
