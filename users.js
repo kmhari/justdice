@@ -9,11 +9,11 @@ User.find = function (id, callback) {
     db.query('SELECT * FROM users where id = ?', id, function (err, rows, fields) {
             if (err) {
                 console.log(err);
-                throw err;
+                callback(err, null);
             } else if (rows.length == 0) {
                 console.log("No user by the id:" + id);
             } else
-                callback(rows[0]);
+                callback(err, rows[0]);
         }
     )
 };
@@ -92,7 +92,10 @@ User.user_point_add = function (id, amount, callback) {
 
 User.transfer = function (from, to, amount, callback) {
     User.find(from, function (err, data) {
-        if (amount > data.points) {
+        if (err) {
+            console.log(err);
+            callback({err: "Unknown User", code: 1}, null);
+        } else if (amount > data.points) {
             User.user_point_add(from, -amount, function (err, from_data) {
                 if (err) {
                     callback({err: err, code: -1}, null);
@@ -157,12 +160,12 @@ User.create = function (gid, callback) {
         })
 };
 
-User.get_balance = function(id,callback){
-    db.query("SELECT points FROM user WHERE id= ?;",id,function(err,rows){
-        if(err){
-            callback(err,null);
-        }else{
-            callback(err,rows[0].points);
+User.get_balance = function (id, callback) {
+    db.query("SELECT points FROM user WHERE id= ?;", id, function (err, rows) {
+        if (err) {
+            callback(err, null);
+        } else {
+            callback(err, rows[0].points);
         }
     });
 }
