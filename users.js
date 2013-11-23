@@ -91,7 +91,7 @@ User.user_point_add = function (id, amount, callback) {
 }
 
 User.transfer = function (from, to, amount, callback) {
-    User.find_by_gid(from, function (err, data) {
+    User.find(from, function (err, data) {
         if (amount > data.points) {
             User.user_point_add(from, -amount, function (err, from_data) {
                 if (err) {
@@ -156,3 +156,13 @@ User.create = function (gid, callback) {
             callback(err, rows);
         })
 };
+
+User.get_balance = function(id,callback){
+    db.query("SELECT points FROM user WHERE id= ?;",id,function(err,rows){
+        if(err){
+            callback(err,null);
+        }else{
+            callback(err,rows[0].points);
+        }
+    });
+}
