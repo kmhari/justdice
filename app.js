@@ -95,9 +95,10 @@ io.sockets.on('connection', function (socket) {
         Bet.get_last_n_bets(30,function(err,rows){
            socket.emit("message",{action:"old_bet",bets:rows});
         });
-        Bet.get_last_n_bets_by_id(30,id,function(){
-
+        Bet.get_last_n_bets_by_id(30,id,function(err1,rows1){
+            socket.emit("message",{action:"my_old_bet",bets:rows1});
         });
+
     }
     socket.on('justnow', function (message) {
         if(!message.gid){

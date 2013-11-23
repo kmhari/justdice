@@ -636,7 +636,11 @@
                         $.each(message.bets,function(key,bet){
                             my_bet(bet, 0);
                         })
-
+                        break;
+                    case 'my_old_bet':
+                        $.each(message.bets,function(key,bet){
+                            my_bet(bet, 1);
+                        })
                         break;
                     case 'new_name':
                         alert.html('');
