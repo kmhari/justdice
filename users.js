@@ -92,11 +92,10 @@ User.user_point_add = function (id, amount, callback) {
 
 User.transfer = function (from, to, amount, callback) {
     User.find(from, function (err, data) {
-        console.log("\n\n\n\n",amount,data,"\n\n\n");
         if (err) {
             console.log(err);
             callback({err: "Unknown User", code: 1}, null);
-        } else if (amount < data.points) {
+        } else if (amount <= data.points) {
             User.user_point_add(from, -amount, function (err, from_data) {
                 if (err) {
                     callback({err: err, code: -1}, null);

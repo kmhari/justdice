@@ -17,20 +17,25 @@ Invest.initialize = function (in_socket) {
     socket.on("invest", function (message) {
         var amount = parseFloat(message.amount);
         if ((!isNaN(amount)) && amount > 0) {
-            if (amount > 0) {
-                socket.emit("error", err_code[7])
-            } else {
-                Invest.create_by_gid(message.gid, message.amount, function (err, data) {
-                    if (err) {
-                        console.log("Invest.initialize", err);
-                    } else {
-                        Invest.get_total_investments(data.id,function(err,total){
-                            socket.emit("update", {balance: data.info.points - amount,investment: total})
-                        })
-
+            User.find_by_gid(message.gid, function (err, user_data) {
+                if (err) {
+                    callback(err, null);
+                } else {
+                    if (amount <= user_data.points) {
+                        Invest.create(user_data.id, message.amount, function (err, data) {
+                            if (err) {
+                                console.log("Invest.initialize", err);
+                            } else {
+                                Invest.get_total_investments(user_data.id, function (err, total) {
+                                    socket.emit("update", {balance: data.info.points - amount, investment: total})
+                                })
+                            }
+                        });
+                    }else{
+                        socket.emit("error",err_code[7]);
                     }
-                });
-            }
+                }
+            });
         }
     });
 }
@@ -91,9 +96,9 @@ Invest.get_all_investments = function (id, callback) {
 
 Invest.get_total_investments = function (id, callback) {
     Invest.get_all_investments(id, function (err, data) {
-        var total;
+        var total = 0;
         for (i = 0; i < data.length; i++)
-            total += data.invest;
-        callback(err,total);
+            total += parseFloat(data[i].invest);
+        callback(err, total);
     });
 }
