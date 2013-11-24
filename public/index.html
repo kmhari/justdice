@@ -17,6 +17,33 @@
     <script src="http://localhost:1337/socket.io/socket.io.js"></script>
 </head>
 <body>
+<div id="modal-login" class="modal">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4>Setup account</h4>
+    </div>
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-sm-6 col-md-4 col-md-offset-4">
+                <div class="account-wall">
+                    <img class="profile-img"
+                         src="https://lh5.googleusercontent.com/-b0-k99FZlyE/AAAAAAAAAAI/AAAAAAAAAAA/eu7opA4byxI/photo.jpg?sz=120"
+                         alt="">
+
+                    <form class="form-signin">
+                        <input type="text" class="form-control" placeholder="Username" id="username" required autofocus>
+                        <input type="password" class="form-control" placeholder="Password" id="password" required>
+                        <button class="btn btn-lg btn-primary btn-block" type="submit">
+                            Setup
+                        </button>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
 <div id="modal" class="modal">
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -98,10 +125,14 @@
 
             <p>The last server seed was:</p>
 
-            <div id="old_sseed" class="monospace number-show">7pyGqC7VvOdipBaIAvVW52hHGk20RM6szsSGIx9_G6TskRWhnGzMK.0GIwFjbqOX</div>
+            <div id="old_sseed" class="monospace number-show">
+                7pyGqC7VvOdipBaIAvVW52hHGk20RM6szsSGIx9_G6TskRWhnGzMK.0GIwFjbqOX
+            </div>
             <p>The last server seed hash was:</p>
 
-            <div id="old_shash" class="monospace number-show">3163fa40fdd0827ede392b9e16648b1cbcf1c2f89a52e80cf4297cb83fe8c713</div>
+            <div id="old_shash" class="monospace number-show">
+                3163fa40fdd0827ede392b9e16648b1cbcf1c2f89a52e80cf4297cb83fe8c713
+            </div>
             <p>Your client seed for that server seed was:</p>
 
             <div id="old_cseed" class="monospace number-show">164907815640242340165576</div>
@@ -162,7 +193,7 @@
                 <div class="controls btn-group" style="margin: 0px">
                     <button class="btn">Deposit</button>
                     <button class="btn">Widthdraw</button>
-                    <button class="btn"  data-toggle="modal" data-target="#modalr">Randomize</button>
+                    <button class="btn" data-toggle="modal" data-target="#modalr">Randomize</button>
                 </div>
             </div>
         </div>
@@ -228,6 +259,7 @@
     <li><a href="#tab4" data-toggle="tab">My Bets</a></li>
     <li><a href="#tab2" data-toggle="tab">Invest</a></li>
     <li><a href="#tab5" data-toggle="tab">Chat</a></li>
+    <li><a href="#tab6" data-toggle="tab">Account</a></li>
     <li><a href="#tab3" data-toggle="tab">Fair?</a></li>
 </ul>
 <div class="tab-content">
@@ -267,7 +299,24 @@
         </div>
     </div>
 </div>
+<div class="tab-pane" id="tab6">
 
+    <p><b>Security Information</b></p>
+
+    <p>An account was automatically created when you first visited the site.
+    If you have cookies enabled, you will be automatically logged in each time you visit from this computer.
+    </p>
+    <p>Your user ID is <span class="number-show userid"> 275810</span>.</p>
+
+    <p>You can log into the same account from a different computer or browser using this link.
+    Protect this secret link as it can be used to access your account balance.</p>
+
+    <p>If you prefer to use a more traditional and secure approach then
+        <button id="setup" class="btn btn-success" data-toggle="modal" data-target="#modal-login">set up a username and password.</button></p>
+
+
+
+</div>
 <div class="tab-pane" id="tab4">
     <p>All your bets come here</p>
     <table class="table" id="myBets">
@@ -593,7 +642,7 @@
             }
         });
 
-        set_bal = function(val){
+        set_bal = function (val) {
             $('#my_balance').html((val).toFixed(7));
             $('#inv_balance').html((val).toFixed(7));
         }
@@ -638,12 +687,12 @@
                         my_bet(message, 0);
                         break;
                     case 'old_bet':
-                        $.each(message.bets,function(key,bet){
+                        $.each(message.bets, function (key, bet) {
                             my_bet(bet, 0);
                         })
                         break;
                     case 'my_old_bet':
-                        $.each(message.bets,function(key,bet){
+                        $.each(message.bets, function (key, bet) {
                             my_bet(bet, 1);
                         })
                         break;
@@ -681,8 +730,8 @@
 
             socket.on('error', function (error) {
                 console.log(error);
-                if(!error) return;
-                var alert = $('#'+error.display);
+                if (!error) return;
+                var alert = $('#' + error.display);
                 alert.html('');
                 alert.append('<div class="alert alert-danger bs-alert-old-docs span6">' + error.message + '</div>');
                 alert.show().delay(5000).fadeOut();
