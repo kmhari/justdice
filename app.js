@@ -48,7 +48,7 @@ app.get("/", function(req, res) {
             res.redirect("/index.html");
         });
     }else
-    res.redirect("/index2.html");
+    res.redirect("/index.html");
 });
 
 app.post("/login",function(req,res){
