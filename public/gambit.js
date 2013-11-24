@@ -20,6 +20,10 @@ $(function () {
         }
     });
 
+    $('#invest_all').click(function(event){
+        socket.emit("invest-all", {gid: getCookie("gambit_guid")});
+    })
+
     function set_investment(val) {
         $('.investment').html(parseFloat(val).toFixed(7));
     }
@@ -32,6 +36,9 @@ $(function () {
                     break;
                 case "investment":
                     set_investment(value);
+                    break;
+                case "bankroll":
+                    $('.invest_pct').html(parseFloat(value).toFixed(7));
                     break;
 
             }

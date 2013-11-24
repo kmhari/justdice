@@ -161,7 +161,7 @@ User.create = function (gid, callback) {
 };
 
 User.get_balance = function (id, callback) {
-    db.query("SELECT points FROM user WHERE id= ?;", id, function (err, rows) {
+    db.query("SELECT points FROM users WHERE id= ?;", id, function (err, rows) {
         if (err) {
             callback(err, null);
         } else {

@@ -147,6 +147,7 @@ io.sockets.on('connection', function (socket) {
                             Pool.add_client(socket, message.name, data.gid);
                         socket.emit("message", message);
                         send_last_bets(socket,data.id);
+                        Invest.emit_investment(data.id,socket);
                     })
                 }
             }

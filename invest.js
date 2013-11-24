@@ -9,10 +9,24 @@ var Invest = exports = module.exports = {};
 var User = require("./users");
 var db = require("./connect");
 var err_code = require("./error_code");
-var socket;
 
-Invest.initialize = function (in_socket) {
-    socket = in_socket;
+Invest.initialize = function (socket) {
+    socket.on("invest-all", function (message) {
+        User.find_by_gid(message.gid, function (err, user_data) {
+            if (user_data.points > 0) {
+                Invest.create(user_data.id, user_data.points, function (err, data) {
+                    if (err) {
+                        console.log("Invest.initialize", err);
+                    } else {
+                        Invest.get_total_investments(user_data.id, function (err, total) {
+                            socket.emit("update", {balance: data.info.points - user_data.points, investment: total})
+                        })
+                    }
+                });
+            }
+        });
+    });
+
 
     socket.on("invest", function (message) {
         var amount = parseFloat(message.amount);
@@ -31,8 +45,8 @@ Invest.initialize = function (in_socket) {
                                 })
                             }
                         });
-                    }else{
-                        socket.emit("error",err_code[7]);
+                    } else {
+                        socket.emit("error", err_code[7]);
                     }
                 }
             });
@@ -40,6 +54,13 @@ Invest.initialize = function (in_socket) {
     });
 }
 
+Invest.emit_investment = function (id, socket) {
+    Invest.calculate_profit(id, function (err, profit, total, balance) {
+        console.log("total", total, "balance", balance, "profit", profit, err);
+        if (!err) socket.emit("update", {investment: total, bankroll: (((profit / balance) * 100).toFixed(7))});
+
+    });
+}
 Invest.create = function (user, amount, callback) {
     db.query("START TRANSACTION");
     User.find(1, function (err, banker) {
@@ -80,10 +101,12 @@ Invest.calculate_profit = function (id, callback) {
         } else {
             User.get_balance(1, function (err, current_balance) {
                 var profit = 0;
+                var total = 0;
                 for (var i = 0; i < rows.length; i++) {
-                    profit = parseFloat(current_balance / rows[i].bank_balance) * rows[i].invest
+                    total += rows[i].invest
+                    profit += parseFloat(current_balance / rows[i].bank_balance) * rows[i].invest
                 }
-                callback(null, profit);
+                callback(null, profit, total, current_balance);
             })
         }
     })
