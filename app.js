@@ -16,6 +16,7 @@ var Chat = require("./chat");
 var Pool = require("./client");
 var Invest = require("./invest");
 var path = require("path");
+var crypto = require('crypto');
 
 var ipaddr  = process.env.OPENSHIFT_NODEJS_IP || "127.0.0.1";
 var port    = process.env.OPENSHIFT_NODEJS_PORT || 1337;
@@ -27,7 +28,7 @@ app.use(express.json());
 app.use(express.cookieParser());
 app.use(express.urlencoded());
 app.use(express.methodOverride());
-app.use(express.static(path.join(__dirname, 'public')));
+
 
 // development only
 if ('development' == app.get('env')) {
@@ -44,10 +45,15 @@ app.get("/", function(req, res) {
         var gid = Seed.create_client_seed();
         res.cookie('gambit_guid', gid);
         User.create(gid,function(err,success){
-            res.redirect("/index2.html");
+            res.redirect("/index.html");
         });
     }else
     res.redirect("/index2.html");
+});
+
+app.post("/login",function(req,res){
+    console.log(req.body.username);
+    console.log(req.body.password);
 });
 
 Chat.initialize(io);
@@ -197,6 +203,7 @@ function process_randomize_seed(message) {
 
 }
 
+app.use(express.static(path.join(__dirname, 'public')));
 server.listen(port,ipaddr);
 
 
