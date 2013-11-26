@@ -41,6 +41,8 @@ $(function () {
     socket.on("setup-response",function(message){
         if(message.success){
             alert("Setup Successful ");
+            $('.unset-account').hide();
+            $('#modal-login').modal('hide');
         }else{
             alert("Setup Unsuccessful "+message.message);
         }

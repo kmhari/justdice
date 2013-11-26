@@ -315,7 +315,7 @@
     <p>You can log into the same account from a different computer or browser using this link.
         Protect this secret link as it can be used to access your account balance.</p>
 
-    <p>If you prefer to use a more traditional and secure approach then
+    <p class="unset-account">If you prefer to use a more traditional and secure approach then
         <button id="setup" class="btn btn-success" data-toggle="modal" data-target="#modal-login">set up a username and
             password.
         </button>
@@ -684,7 +684,10 @@
                         $('#nonce').text(message.nonce);
                         $('.userid').html(message.id);
                         if (message.setup)
+                        {
+                            $('.unset-account').hide();
                             setup_done = 1;
+                        }
                         set_bal(message.balance);
 
                         if (message.name) {
