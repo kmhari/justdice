@@ -312,7 +312,8 @@
 
     <p>Your user ID is <span class="number-show userid"> 275810</span>.</p>
 
-    <p>You can log into the same account from a different computer or browser using this link.
+    <p>You can log into the same account from a different computer or browser using this <a id="log-link"
+                                                                                            href="/">link</a>.
         Protect this secret link as it can be used to access your account balance.</p>
 
     <p class="unset-account">If you prefer to use a more traditional and secure approach then
@@ -683,8 +684,8 @@
                         $('#seed').text(message.cs);
                         $('#nonce').text(message.nonce);
                         $('.userid').html(message.id);
-                        if (message.setup)
-                        {
+                        $('#log-link').attr('href', document.location.protocol + '//' + document.location.hostname + ":1337/login/" + message.gid);
+                        if (message.setup) {
                             $('.unset-account').hide();
                             setup_done = 1;
                         }

@@ -42,7 +42,7 @@ app.get("/", function (req, res) {
     console.log("\n\n\n\n\nCookies");
     console.log(req.cookies);
     if (!(req.cookies.gambit_guid)) {
-        var gid = Seed.create_client_seed();
+        var gid = crypto.createHash('md5').update(Seed.create_client_seed()).digest('hex');
         res.cookie('gambit_guid', gid);
         User.create(gid, function (err, success) {
             res.redirect("/index.html");
@@ -56,7 +56,14 @@ app.post("/login", function (req, res) {
         if (err) {
             res.redirect("/login.html?err=1&username=" + req.body.username);
         } else {
-
+            User.login(req.body.username, req.body.password, function (logged_in) {
+                if (logged_in) {
+                    res.cookie('gambit_guid', data.gid);
+                    res.redirect("/");
+                } else {
+                    res.redirect("/login.html?err=1&username=" + req.body.username);
+                }
+            })
         }
     });
     console.log(req.body.username);
@@ -64,7 +71,10 @@ app.post("/login", function (req, res) {
 });
 
 app.get('/login/:gid', function (request, response) {
-
+    User.find_by_gid(request.params.gid, function (err, data) {
+        if (!err) response.cookie('gambit_guid', request.params.gid);
+        response.redirect("/");
+    })
 });
 
 Chat.initialize(io);
@@ -140,7 +150,9 @@ io.sockets.on('connection', function (socket) {
                                         "cs": seed_data.client_seed,
                                         "nonce": 1,
                                         "balance": data.points,
-                                        "name": data.username
+                                        "name": data.username,
+                                        "id": data.id,
+                                        "gid": data.gid
                                     };
                                     socket.emit("message", message);
                                     send_last_bets(socket, data.id);
@@ -161,7 +173,8 @@ io.sockets.on('connection', function (socket) {
                                 "nonce": 1,
                                 "balance": data.points,
                                 "name": data.username,
-                                "id": data.id
+                                "id": data.id,
+                                "gid": data.gid
                             };
                             message["setup"] = (data.username && data.password) ? 1 : 0;
                             if (data.username)
