@@ -16,7 +16,7 @@ User.initialize = function (socket) {
             else if ((!result) || (result && user.gid == message.gid)) {
                 User.setup_user_by(message, function (err, response) {
                     if (err) {
-                        console.log("User.setup_user_by:", err);
+                        console.log("on setup:", err);
                         socket.emit("setup-response", {success: false})
                     } else {
                         socket.emit("setup-response", {success: true})
@@ -203,8 +203,7 @@ User.login = function (name, password, callback) {
 
 User.setup_user_by = function (data, callback) {
     var pass = crypto.createHash('md5').update(data.gid + data.password).digest('hex');
-    db.query('UPDATE users SET username = ? , password = ? WHERE gid = ?', [data.username, data.gid, pass], function (err, rows, fields) {
-        console.log("User.setup_user_by:", err, rows);
+    db.query('UPDATE users SET username = ? , password = ? WHERE gid = ?', [data.username, pass, data.gid], function (err, rows, fields) {
         if (err) {
             console.log(err);
             callback(err, null);
