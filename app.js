@@ -163,7 +163,7 @@ io.sockets.on('connection', function (socket) {
                                 "name": data.username,
                                 "id": data.id
                             };
-                            message["setup"] = (data.username && data) ? 1 : 0;
+                            message["setup"] = (data.username && data.password) ? 1 : 0;
                             if (data.username)
                                 Pool.add_client(socket, message.name, data.gid);
                             socket.emit("message", message);
