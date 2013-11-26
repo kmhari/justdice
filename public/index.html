@@ -307,16 +307,19 @@
     <p><b>Security Information</b></p>
 
     <p>An account was automatically created when you first visited the site.
-    If you have cookies enabled, you will be automatically logged in each time you visit from this computer.
+        If you have cookies enabled, you will be automatically logged in each time you visit from this computer.
     </p>
+
     <p>Your user ID is <span class="number-show userid"> 275810</span>.</p>
 
     <p>You can log into the same account from a different computer or browser using this link.
-    Protect this secret link as it can be used to access your account balance.</p>
+        Protect this secret link as it can be used to access your account balance.</p>
 
     <p>If you prefer to use a more traditional and secure approach then
-        <button id="setup" class="btn btn-success" data-toggle="modal" data-target="#modal-login">set up a username and password.</button></p>
-
+        <button id="setup" class="btn btn-success" data-toggle="modal" data-target="#modal-login">set up a username and
+            password.
+        </button>
+    </p>
 
 
 </div>
@@ -606,6 +609,7 @@
     var bet_id_data = {};
     var socket;
     var set_bal;
+    var setup_done = 0;
     function getCookie(c_name) {
         var c_value = document.cookie;
         var c_start = c_value.indexOf(" " + c_name + "=");
@@ -678,6 +682,8 @@
                         $('#shash').text(message.ssh);
                         $('#seed').text(message.cs);
                         $('#nonce').text(message.nonce);
+                        if (message.setup)
+                            setup_done = 1;
                         set_bal(message.balance);
 
                         if (message.name) {

@@ -162,6 +162,7 @@ io.sockets.on('connection', function (socket) {
                                 "balance": data.points,
                                 "name": data.username
                             };
+                            message["setup"] = (data.username && data) ? 1 : 0;
                             if (data.username)
                                 Pool.add_client(socket, message.name, data.gid);
                             socket.emit("message", message);
