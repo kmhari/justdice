@@ -10,17 +10,47 @@
 <div id="fullscreen_bg" class="fullscreen_bg"/>
 
 <div class="container">
-
     <form class="form-signin" action="/login" method="post">
+        <div class="row" id="error">
+        </div>
         <h1 class="form-signin-heading ">Sign In</h1>
-        <input type="text" class="form-control" name="username" placeholder="username" required="" autofocus="">
+        <input type="text" class="form-control" name="username" id="username" placeholder="username" required="" autofocus="">
         <input type="password" class="form-control" name="password" placeholder="password" required="">
         <button class="btn btn-lg btn-primary btn-block" type="submit">
             Sign In
         </button>
-        <a href="/forgot" class="form-signin-heading" ><u>Forgot Password</u></a>
+        <a href="/forgot" class="form-signin-heading"><u>Forgot Password</u></a>
     </form>
 
 </div>
+<script>
+    var QueryString = function () {
+        // This function is anonymous, is executed immediately and
+        // the return value is assigned to QueryString!
+        var query_string = {};
+        var query = window.location.search.substring(1);
+        var vars = query.split("&");
+        for (var i = 0; i < vars.length; i++) {
+            var pair = vars[i].split("=");
+            // If first entry with this name
+            if (typeof query_string[pair[0]] === "undefined") {
+                query_string[pair[0]] = pair[1];
+                // If second entry with this name
+            } else if (typeof query_string[pair[0]] === "string") {
+                var arr = [ query_string[pair[0]], pair[1] ];
+                query_string[pair[0]] = arr;
+                // If third or later entry with this name
+            } else {
+                query_string[pair[0]].push(pair[1]);
+            }
+        }
+        return query_string;
+    }();
+    if (QueryString.err) {
+        var alert = document.getElementById('error');
+        alert.innerHTML = ('<div class="alert alert-danger bs-alert-old-docs span4">Wrong Username or Password</div>');
+        var alert = document.getElementById('username').setAttribute("value", QueryString.username);
+    }
+</script>
 </body>
 </html>

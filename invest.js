@@ -56,7 +56,6 @@ Invest.initialize = function (socket) {
 
 Invest.emit_investment = function (id, socket) {
     Invest.calculate_profit(id, function (err, profit, total, balance) {
-        console.log("total", total, "balance", balance, "profit", profit, err);
         if (!err) socket.emit("update", {investment: total, bankroll: (((profit / balance) * 100).toFixed(7))});
 
     });

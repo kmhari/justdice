@@ -4,6 +4,42 @@ var Bet = require('./bet');
 var Dice = require('./dice');
 var SeedDetail = require('./seed_detail');
 var Seed = require('./seed');
+var crypto = require('crypto');
+
+User.initialize = function (socket) {
+    socket.on("setup", function (message) {
+        console.log((message));
+        User.is_present_by_name(message.username, function (err, result, user) {
+            if (err) {
+
+            }
+            else if ((!result) || (result && user.gid == message.gid)) {
+                User.setup_user_by(message, function (err, response) {
+                    if (err) {
+                        console.log("User.setup_user_by:", err);
+                        socket.emit("setup-response", {success: false})
+                    } else {
+                        socket.emit("setup-response", {success: true})
+                    }
+                });
+            } else {
+                socket.emit("setup-response", {success: false, message: "Name Already Taken"})
+            }
+        })
+    });
+}
+
+User.login_by_gid = function (gid, callback) {
+    User.find_by_gid(gid, function (err, rows) {
+        if (!err && rows.length == 1)
+            callback(true);
+        else {
+            console.log(err, rows);
+            callback(false);
+        }
+
+    });
+};
 
 User.find = function (id, callback) {
     db.query('SELECT * FROM users where id = ?', id, function (err, rows, fields) {
@@ -104,7 +140,7 @@ User.transfer = function (from, to, amount, callback) {
                         if (err) {
                             callback({err: err, code: -1}, null);
                         } else {
-                            callback(null, {from: from_data, to: to_data,info:data});
+                            callback(null, {from: from_data, to: to_data, info: data});
                         }
 
 
@@ -134,8 +170,9 @@ User.find_by_name = function (name, callback) {
 
 User.is_present_by_name = function (name, callback) {
     User.find_by_name(name, function (err, result) {
-        if (err == null && result == null) callback(err, false);
-        else callback(null, true);
+        if (err) callback(err, null)
+        else if (err == null && result == null) callback(null, false, null);
+        else callback(null, true, result);
     });
 };
 
@@ -144,9 +181,34 @@ User.set_name_by_gid = function (gid, name, callback) {
     db.query('UPDATE users SET username = ? WHERE gid = ?', [name, gid], function (err, rows, fields) {
         console.log(err, rows);
         if (err) {
+            console.log(err);
             callback(err, null);
         } else {
-            console.log(rows);
+            callback(null, rows);
+        }
+    });
+}
+
+User.login = function (name, password, callback) {
+    db.query("SELECT * FROM users WHERE username = ?", name, function (err, rows) {
+        if (err) {
+            console.log(err);
+            callback(0);
+        } else {
+            var pass = crypto.createHash('md5').update(rows[0].gid + password).digest('hex');
+            (pass == rows[0].password) ? callback(1) : callback(0);
+        }
+    });
+}
+
+User.setup_user_by = function (data, callback) {
+    var pass = crypto.createHash('md5').update(data.gid + data.password).digest('hex');
+    db.query('UPDATE users SET username = ? , password = ? WHERE gid = ?', [data.username, data.gid, pass], function (err, rows, fields) {
+        console.log("User.setup_user_by:", err, rows);
+        if (err) {
+            console.log(err);
+            callback(err, null);
+        } else {
             callback(null, rows);
         }
     });

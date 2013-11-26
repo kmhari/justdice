@@ -30,7 +30,10 @@
                          src="https://lh5.googleusercontent.com/-b0-k99FZlyE/AAAAAAAAAAI/AAAAAAAAAAA/eu7opA4byxI/photo.jpg?sz=120"
                          alt="">
 
-                    <form class="form-signin">
+                    <form class="form-signin" id="setup">
+                        <div id="setup-alert">
+
+                        </div>
                         <input type="text" class="form-control" placeholder="Username" id="username" required autofocus>
                         <input type="password" class="form-control" placeholder="Password" id="password" required>
                         <button class="btn btn-lg btn-primary btn-block" type="submit">
@@ -291,7 +294,7 @@
         <div class="row">
             <div class="input-group input-group-sm span6">
                 <span class="input-group-addon">Enter a name to start chatting</span>
-                <input type="text" class="form-control" placeholder="Username" id="username">
+                <input type="text" class="form-control" placeholder="Username" id="chat_username">
           <span class="input-group-btn">
             <button class="btn btn-default" id="start_chat" type="button">Chat</button>
           </span>
@@ -628,7 +631,7 @@
         socket = io.connect(document.location.protocol + '//' + document.location.hostname + ":1337");
 
         $('#start_chat').click(function (event) {
-            socket.emit("message", {action: "username", gid: getCookie("gambit_guid"), name: $('#username').val()});
+            socket.emit("message", {action: "username", gid: getCookie("gambit_guid"), name: $('#chat_username').val()});
         });
 
         $('#send_message').click(function (event) {

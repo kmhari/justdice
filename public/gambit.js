@@ -20,13 +20,31 @@ $(function () {
         }
     });
 
-    $('#invest_all').click(function(event){
+    $('#invest_all').click(function (event) {
         socket.emit("invest-all", {gid: getCookie("gambit_guid")});
     })
+
+    $('#setup').submit(function (event) {
+
+        var username = $('#username').val();
+        var password = $('#password').val();
+        console.log(username,password);
+        socket.emit("setup", {gid: getCookie("gambit_guid"), username: username, password: password});
+        event.preventDefault();
+    });
+
 
     function set_investment(val) {
         $('.investment').html(parseFloat(val).toFixed(7));
     }
+
+    socket.on("setup-response",function(message){
+        if(message.success){
+            alert("Setup Successful ");
+        }else{
+            alert("Setup Unsuccessful "+message.message);
+        }
+    });
 
     socket.on("update", function (message) {
         $.each(message, function (key, value) {

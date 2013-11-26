@@ -18,8 +18,8 @@ var Invest = require("./invest");
 var path = require("path");
 var crypto = require('crypto');
 
-var ipaddr  = process.env.OPENSHIFT_NODEJS_IP || "127.0.0.1";
-var port    = process.env.OPENSHIFT_NODEJS_PORT || 1337;
+var ipaddr = process.env.OPENSHIFT_NODEJS_IP || "127.0.0.1";
+var port = process.env.OPENSHIFT_NODEJS_PORT || 1337;
 
 // all environments
 app.set('port', process.env.PORT || 8000);
@@ -38,22 +38,33 @@ if ('development' == app.get('env')) {
 var server = http.createServer(app);
 var io = socketio.listen(server);
 
-app.get("/", function(req, res) {
+app.get("/", function (req, res) {
     console.log("\n\n\n\n\nCookies");
     console.log(req.cookies);
-    if(!(req.cookies.gambit_guid)){
+    if (!(req.cookies.gambit_guid)) {
         var gid = Seed.create_client_seed();
         res.cookie('gambit_guid', gid);
-        User.create(gid,function(err,success){
+        User.create(gid, function (err, success) {
             res.redirect("/index.html");
         });
-    }else
-    res.redirect("/index.html");
+    } else
+        res.redirect("/index.html");
 });
 
-app.post("/login",function(req,res){
+app.post("/login", function (req, res) {
+    User.find_by_name(req.body.username, function (err, data) {
+        if (err) {
+            res.redirect("/login.html?err=1&username=" + req.body.username);
+        } else {
+
+        }
+    });
     console.log(req.body.username);
     console.log(req.body.password);
+});
+
+app.get('/login/:gid', function (request, response) {
+
 });
 
 Chat.initialize(io);
@@ -61,6 +72,7 @@ Chat.initialize(io);
 
 io.sockets.on('connection', function (socket) {
     Invest.initialize(socket);
+    User.initialize(socket);
     socket.on('message', function (message) {
 //		console.log('received message:', message);
         switch (message.action) {
@@ -84,15 +96,15 @@ io.sockets.on('connection', function (socket) {
 
                 var pm = message.message.split(" ");
                 var to = pm[1];
-                if(!pm[1]) socket.emit("error",handle_error(5));
-                if(!pm[2]) socket.emit("error",handle_error(6));
-                pm.splice(0,2);
+                if (!pm[1]) socket.emit("error", handle_error(5));
+                if (!pm[2]) socket.emit("error", handle_error(6));
+                pm.splice(0, 2);
                 var text = pm.join(' ');
-                User.is_present_by_name(to, function (err,result) {
-                    if(result)
-                    Chat.addMessage(data.username, to, text);
+                User.is_present_by_name(to, function (err, result) {
+                    if (result)
+                        Chat.addMessage(data.username, to, text);
                     else
-                    socket.emit("error",handle_error(4));
+                        socket.emit("error", handle_error(4));
                 });
 
             } else
@@ -100,64 +112,65 @@ io.sockets.on('connection', function (socket) {
         });
     });
 
-    function send_last_bets(socket,id){
-        Bet.get_last_n_bets(30,function(err,rows){
-           socket.emit("message",{action:"old_bet",bets:rows});
+    function send_last_bets(socket, id) {
+        Bet.get_last_n_bets(30, function (err, rows) {
+            socket.emit("message", {action: "old_bet", bets: rows});
         });
-        Bet.get_last_n_bets_by_id(30,id,function(err1,rows1){
-            socket.emit("message",{action:"my_old_bet",bets:rows1});
+        Bet.get_last_n_bets_by_id(30, id, function (err1, rows1) {
+            socket.emit("message", {action: "my_old_bet", bets: rows1});
         });
 
     }
+
     socket.on('justnow', function (message) {
-        if(!message.gid){
+        if (!message.gid) {
             socket.emit("error", handle_error(1));
-        }else
-        User.find_by_gid(message.gid, function (err, data) {
-            if (err) {
-                socket.emit("error", handle_error(err.code));
-            } else {
-                if (data.seed_detail_id == 0) {
-                    SeedDetail.create(data.id, data.gid, function (seed_data) {
-                        User.set_new_seed(data.gid, seed_data.id, function (user_update) {
-                            if (user_update.changedRows == 1) {
-                                message = {
-                                    "action": "seed_data",
-                                    "ssh": Seed.get_server_hash_by_seed(seed_data.server_seed),
-                                    "cs": seed_data.client_seed,
-                                    "nonce": 1,
-                                    "balance": data.points,
-                                    "name": data.username
-                                };
-                                socket.emit("message", message);
-                                send_last_bets(socket,data.id);
-
-                                if (data.username)
-                                    Pool.add_client(socket, message.name, data.gid);
-                            } else {
-
-                            }
-                        });
-                    })
+        } else
+            User.find_by_gid(message.gid, function (err, data) {
+                if (err) {
+                    socket.emit("error", handle_error(err.code));
                 } else {
-                    SeedDetail.find(data.seed_detail_id, function (seed_data) {
-                        message = {
-                            "action": "seed_data",
-                            "ssh": Seed.get_server_hash_by_seed(seed_data.server_seed),
-                            "cs": seed_data.client_seed,
-                            "nonce": 1,
-                            "balance": data.points,
-                            "name": data.username
-                        };
-                        if (data.username)
-                            Pool.add_client(socket, message.name, data.gid);
-                        socket.emit("message", message);
-                        send_last_bets(socket,data.id);
-                        Invest.emit_investment(data.id,socket);
-                    })
+                    if (data.seed_detail_id == 0) {
+                        SeedDetail.create(data.id, data.gid, function (seed_data) {
+                            User.set_new_seed(data.gid, seed_data.id, function (user_update) {
+                                if (user_update.changedRows == 1) {
+                                    message = {
+                                        "action": "seed_data",
+                                        "ssh": Seed.get_server_hash_by_seed(seed_data.server_seed),
+                                        "cs": seed_data.client_seed,
+                                        "nonce": 1,
+                                        "balance": data.points,
+                                        "name": data.username
+                                    };
+                                    socket.emit("message", message);
+                                    send_last_bets(socket, data.id);
+
+                                    if (data.username)
+                                        Pool.add_client(socket, message.name, data.gid);
+                                } else {
+
+                                }
+                            });
+                        })
+                    } else {
+                        SeedDetail.find(data.seed_detail_id, function (seed_data) {
+                            message = {
+                                "action": "seed_data",
+                                "ssh": Seed.get_server_hash_by_seed(seed_data.server_seed),
+                                "cs": seed_data.client_seed,
+                                "nonce": 1,
+                                "balance": data.points,
+                                "name": data.username
+                            };
+                            if (data.username)
+                                Pool.add_client(socket, message.name, data.gid);
+                            socket.emit("message", message);
+                            send_last_bets(socket, data.id);
+                            Invest.emit_investment(data.id, socket);
+                        })
+                    }
                 }
-            }
-        })
+            })
 
     });
 });
@@ -185,7 +198,7 @@ function process_new_bet(message, socket) {
 function process_username(socket, message) {
     User.is_present_by_name(message.name, function (err, result) {
         if (err) {
-
+            console.log("User.is_present_by_name:", err);
         } else {
             if (result) {
                 socket.emit("error", handle_error(3));
@@ -204,7 +217,7 @@ function process_randomize_seed(message) {
 }
 
 app.use(express.static(path.join(__dirname, 'public')));
-server.listen(port,ipaddr);
+server.listen(port, ipaddr);
 
 
 function test() {
