@@ -160,7 +160,8 @@ io.sockets.on('connection', function (socket) {
                                 "cs": seed_data.client_seed,
                                 "nonce": 1,
                                 "balance": data.points,
-                                "name": data.username
+                                "name": data.username,
+                                "id": data.id
                             };
                             message["setup"] = (data.username && data) ? 1 : 0;
                             if (data.username)

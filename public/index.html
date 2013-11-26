@@ -682,6 +682,7 @@
                         $('#shash').text(message.ssh);
                         $('#seed').text(message.cs);
                         $('#nonce').text(message.nonce);
+                        $('.userid').html(message.id);
                         if (message.setup)
                             setup_done = 1;
                         set_bal(message.balance);
