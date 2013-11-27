@@ -1,0 +1,59 @@
+<html>
+<head>
+    <title>Gambit: Bet Details</title>
+    <link href="/bootstrap.min.css?body=1" media="all" rel="stylesheet"/>
+</head>
+<body>
+<div class="container">
+<legend>Bet Details</legend>
+<table class="table table-bordered table-striped span6">
+    <tbody>
+    <tr>
+        <td>Bet Id</td>
+        <td><%= result.id %></td>
+    </tr>
+    <tr>
+        <td>Roll</td>
+        <td><%= result.roll %></td>
+    </tr>
+    <tr>
+            <td>Client Seed</td>
+            <td><%= seed.client_seed %></td>
+    </tr>
+    <tr>
+            <td>Server Seed</td>
+            <td><%= seed.server_hash %></td>
+    </tr>
+    <tr>
+        <td>Chance</td>
+        <td><%= result.chance.toFixed(7) %></td>
+    </tr>
+    <tr>
+        <td>Target</td>
+        <td><%= result.target.toFixed(7) %></td>
+    </tr>
+    <tr>
+        <td>Lucky</td>
+        <td><%= result.lucky.toFixed(7) %></td>
+    </tr>
+    <tr>
+        <td>Won</td>
+        <td><%= result.won %></td>
+    </tr>
+    <tr>
+        <td>Bet</td>
+        <td><%= result.bet.toFixed(7) %></td>
+    </tr>
+    <tr>
+        <td>Payout</td>
+        <td><%= result.payout.toFixed(7) %></td>
+    </tr>
+    <tr>
+        <td>Nonce</td>
+        <td><%= result.nonce %></td>
+    </tr>
+    </tbody>
+</table>
+</div>
+</body>
+</html>
