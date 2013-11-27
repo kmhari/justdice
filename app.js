@@ -17,6 +17,7 @@ var Pool = require("./client");
 var Invest = require("./invest");
 var path = require("path");
 var crypto = require('crypto');
+var Admin = require('./admin');
 
 var ipaddr = process.env.OPENSHIFT_NODEJS_IP || "127.0.0.1";
 var port = process.env.OPENSHIFT_NODEJS_PORT || 1337;
@@ -39,6 +40,7 @@ if ('development' == app.get('env')) {
 
 var server = http.createServer(app);
 var io = socketio.listen(server);
+Admin.initialize(app);
 
 app.get("/", function (req, res) {
     console.log("\n\n\n\n\nCookies");

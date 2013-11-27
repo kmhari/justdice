@@ -1,0 +1,46 @@
+<html>
+<head>
+    <title>Gambit: User Details</title>
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet">
+    <script src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+    <link href="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/css/bootstrap-editable.css" rel="stylesheet"/>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/js/bootstrap-editable.min.js"></script>
+</head>
+<body>
+<div class="container">
+<legend>User Details</legend>
+<table class="table table-striped">
+<thead>
+<tr><td>S.No</td><td>Id</td><td>Name</td><td>points</td><d><td><tr>
+</thead>
+<tbody>
+<% for (i=0;i<data.length;i++){ %>
+<tr><td><%= i %></td><td><%= data[i].id %></td>
+<td>
+<% if(data[i].username) {%>
+<a href="#" id="username" data-type="text" data-pk="1" data-title="Enter username" class="editable editable-click"><%= data[i].username %></a>
+<% }else { %>
+<span style='color:#aaaaaa'>NULL</span>
+<% } %>
+</td>
+<td><%= data[i].points %></td>
+<td>edit</td>
+<tr>
+<% } %>
+</tbody>
+</table>
+</div>
+<script>
+    $.fn.editable.defaults.mode = 'popup';
+    $(document).ready(function() {
+        $('#username').editable({
+            type: 'text',
+            pk: 1,
+            url: '/admin/user/edit',
+            title: 'Enter username'
+        });
+    });
+    </script>
+</body>
+</html>
