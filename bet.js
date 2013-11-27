@@ -59,5 +59,18 @@ Bet.get_last_n_bets = function (n, callback) {
     });
 }
 
+Bet.find = function (id, callback) {
+    db.query('SELECT * FROM bets WHERE id = ?', id, function (err, rows, fields) {
+            if (err) {
+                console.log(err);
+                callback(err,null);
+            } else if (rows.length == 0) {
+                console.log("No bet by the id:" + id);
+                callback(err,null);
+            } else
+                callback(null,rows[0]);
+         }
+    )
+};
 
 

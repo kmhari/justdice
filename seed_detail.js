@@ -21,12 +21,12 @@ SeedDetail.find = function (id, callback) {
     db.query('SELECT * FROM seed_details where id = ?', id, function (err, rows, fields) {
             if (err) {
                 console.log(err);
-                throw err;
+                callback(err,null);
             } else if (rows.length == 0) {
                 console.log("No seed detail by the id:" + id);
-                throw {err: "seed detail not found", id: id}
+                callback(null,null);
             } else
-                callback(rows[0]);
+                callback(null,rows[0]);
         }
     )
 };

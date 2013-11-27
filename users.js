@@ -87,7 +87,7 @@ User.bet = function (message, callback) {
         } else
             Bet.get_next_nonce([data.seed_detail_id, data.id], function (nonce_data) {
                 nonce_data++;
-                SeedDetail.find(data.seed_detail_id, function (seed_data) {
+                SeedDetail.find(data.seed_detail_id, function (err, seed_data) {
                     var roll = (message.roll == "rhigh") ? "high" : "low";
                     var target = Dice.get_target(message.chance, message.roll);
                     var ssh = Seed.get_server_hash_by_seed(seed_data.server_seed);

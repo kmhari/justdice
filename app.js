@@ -28,6 +28,8 @@ app.use(express.json());
 app.use(express.cookieParser());
 app.use(express.urlencoded());
 app.use(express.methodOverride());
+app.set('view engine', 'ejs')
+app.set('views', __dirname + '/views');
 
 
 // development only
@@ -75,6 +77,21 @@ app.get('/login/:gid', function (request, response) {
         if (!err) response.cookie('gambit_guid', request.params.gid);
         response.redirect("/");
     })
+});
+
+app.get('/bet/:betid', function (request, response) {
+    Bet.find(request.params.betid, function (err, result) {
+        if (result) {
+            SeedDetail.find(result.seed_detail_id, function (err, seed_data) {
+                console.log(seed_data,err);
+                if (!err)
+                {
+                    seed_data["server_hash"] = crypto.createHash('sha256').update(seed_data.server_seed).digest("hex");
+                    response.render("bet", {result: result, seed: seed_data})
+                }
+            })
+        }
+    });
 });
 
 Chat.initialize(io);
@@ -165,7 +182,7 @@ io.sockets.on('connection', function (socket) {
                             });
                         })
                     } else {
-                        SeedDetail.find(data.seed_detail_id, function (seed_data) {
+                        SeedDetail.find(data.seed_detail_id, function (err,seed_data) {
                             message = {
                                 "action": "seed_data",
                                 "ssh": Seed.get_server_hash_by_seed(seed_data.server_seed),
