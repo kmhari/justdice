@@ -657,7 +657,7 @@
         // Ready
         function my_bet(bet, is_my_bet) {
             var str = '<tr class="' + (bet.won ? 'success' : 'danger') + '">'
-                    + '<td>BET' + bet.id + '</td>'
+                    + '<td><a href="/bet/' + bet.id + '" target="_blank" >BET' + bet.id + '</a></td>'
                     + '<td>' + bet.user_id + '</td>'
                     + '<td>' + bet.created_at + '</td>'
                     + '<td>' + bet.lucky + '</td>'
