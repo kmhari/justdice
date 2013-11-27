@@ -160,7 +160,7 @@ io.sockets.on('connection', function (socket) {
                     socket.emit("error", handle_error(err.code));
                 } else {
                     if (data.seed_detail_id == 0) {
-                        SeedDetail.create(data.id, data.gid, function (seed_data) {
+                        SeedDetail.create(data.id, data.gid, function (err, seed_data) {
                             User.set_new_seed(data.gid, seed_data.id, function (user_update) {
                                 if (user_update.changedRows == 1) {
                                     message = {

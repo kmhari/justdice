@@ -20,5 +20,17 @@ Admin.initialize = function(app){
 
     });
 
+    app.post('/admin/user/edit',function(request,response){
+        var sql = "UPDATE users SET "+request.body.name+ " = ? WHERE ID = ?";
+        db.query(sql,[request.body.value,request.body.pk],function(err,rows){
+            if(!err){
+                response.json({success:true});
+            }else{
+                console.log(err);
+                response.json(400,"Cannot Update");
+            }
+        })
+    });
+
 
 }

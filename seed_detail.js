@@ -13,6 +13,7 @@ SeedDetail.create = function (user_id, user_gid, callback) {
                 console.log(err);
                 throw err;
             }
+            console.log(err,rows);
             SeedDetail.find(rows.insertId, callback);
         })
 };

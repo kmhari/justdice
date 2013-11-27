@@ -12,19 +12,19 @@
 <legend>User Details</legend>
 <table class="table table-striped">
 <thead>
-<tr><td>S.No</td><td>Id</td><td>Name</td><td>points</td><d><td><tr>
+<tr><td style='width:10px'>S.No</td><td style='width:10px'>Id</td><td>Name</td><td>points</td><d><td><tr>
 </thead>
 <tbody>
 <% for (i=0;i<data.length;i++){ %>
 <tr><td><%= i %></td><td><%= data[i].id %></td>
 <td>
 <% if(data[i].username) {%>
-<a href="#" id="username" data-type="text" data-pk="1" data-title="Enter username" class="editable editable-click"><%= data[i].username %></a>
+<%= data[i].username %>
 <% }else { %>
 <span style='color:#aaaaaa'>NULL</span>
 <% } %>
 </td>
-<td><%= data[i].points %></td>
+<td><a href="#" id="points" data-type="text" data-pk="<%= data[i].id %>" data-title="Enter username" class="editable editable-click points"><%= data[i].points %></a></td>
 <td>edit</td>
 <tr>
 <% } %>
@@ -32,13 +32,27 @@
 </table>
 </div>
 <script>
+function getCookieValue(key) {
+  var cookies = document.cookie.split('; ');
+  for (var i = 0, parts; (parts = cookies[i] && cookies[i].split('=')); i++) {
+    if (decode(parts.shift()) === key) {
+      return decode(parts.join('='));
+    }
+  }
+  return null;
+}
+
+function decode(s) {
+  return decodeURIComponent(s.replace(/\+/g, ' '));
+}
+
     $.fn.editable.defaults.mode = 'popup';
     $(document).ready(function() {
-        $('#username').editable({
+        $('.points').editable({
             type: 'text',
             pk: 1,
             url: '/admin/user/edit',
-            title: 'Enter username'
+            title: 'Enter username',
         });
     });
     </script>
