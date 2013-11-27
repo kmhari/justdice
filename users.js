@@ -230,3 +230,9 @@ User.get_balance = function (id, callback) {
         }
     });
 }
+
+User.page = function (pgno,callback) {
+    db.query("SELECT * FROM users ;", function (err, rows) {
+       callback(rows);
+    });
+}
