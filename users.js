@@ -90,6 +90,7 @@ User.bet = function (message, callback) {
                 SeedDetail.find(data.seed_detail_id, function (err, seed_data) {
                     var roll = (message.roll == "rhigh") ? "high" : "low";
                     var target = Dice.get_target(message.chance, message.roll);
+                    console.log("target:",target,"\n\n\n\n\n\n");
                     var ssh = Seed.get_server_hash_by_seed(seed_data.server_seed);
                     var ss = seed_data.server_seed;
                     var cs = seed_data.client_seed;
@@ -101,14 +102,14 @@ User.bet = function (message, callback) {
                         won = result > target;
                     else
                         won = result < target;
-                    var profit = (won) ? Dice.calculate_profit(message.chance, message.bet) : parseFloat(-1 * message.bet);
+                    var profit = (won) ? Dice.calculate_profit(message.chance, message.bet) : parseFloat(-1 * message.bet).toFixed(7);
                     var bet_details = [data.id, data.seed_detail_id, roll, won, message.bet, payout, profit, message.chance, target, result, nonce_data];
 
                     Bet.create(bet_details, function (bet_result_data) {
                         console.log("Created Bet");
                         var ret = [];
                         ret["bet_result_data"] = bet_result_data;
-                        ret["user_balance"] = data.points + profit;
+                        ret["user_balance"] = data.points+ profit;
                         callback(ret);
                     })
                 })

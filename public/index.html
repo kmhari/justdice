@@ -545,40 +545,49 @@
     var user_name = "";
 
     function recalculate(id) {
-        var value = parseFloat($('#' + id).val());
+        var value = parseFloat($('#' + id).val()).toFixed(7);
         switch (id) {
             case "chanceToWin":
-                $('#payout').val(((100 - house_edge) / value).toFixed(5));
-                $('#profit').val((($('#payout').val() - 1) * $('#betSize').val()).toFixed(5));
-                $('#rlow').text("<" + String(parseFloat($('#' + id).val()).toFixed(5)));
-                $('#rhigh').text(">" + String((99.99999 - parseFloat($('#' + id).val())).toFixed(5)));
+                $('#payout').val(((100 - house_edge) / value).toFixed(7));
+                $('#profit').val(((parseFloat($('#payout').val()).toFixed(7) - 1) * $('#betSize').val()).toFixed(7));
+                $('#rlow').text("<" + String(parseFloat($('#' + id).val()).toFixed(7)));
+                $('#rhigh').text(">" + String((99.99999 - parseFloat($('#' + id).val())).toFixed(7)));
 
                 break;
             case "payout":
-                $('#chanceToWin').val(((100 - house_edge) / value).toFixed(5));
-                $('#profit').val((($('#payout').val() - 1) * $('#betSize').val()).toFixed(5));
-                $('#rlow').text("<" + String(parseFloat($('#' + id).val()).toFixed(5)));
-                $('#rhigh').text(">" + String((99.99999 - parseFloat($('#' + id).val())).toFixed(5)));
+                $('#chanceToWin').val(((100 - house_edge) / value).toFixed(7));
+                $('#profit').val((($('#payout').val() - 1) * $('#betSize').val()).toFixed(7));
+                $('#rlow').text("<" + String(parseFloat($('#chanceToWin').val()).toFixed(7)));
+                $('#rhigh').text(">" + String((99.99999 - parseFloat($('#chanceToWin').val())).toFixed(7)));
                 break;
             case "betSize":
-                $('#profit').val((($('#payout').val() - 1) * value).toFixed(5));
+                $('#profit').val((($('#payout').val() - 1) * value).toFixed(7));
                 break;
             case "profit":
-                $('#betSize').val((value / ($('#payout').val() - 1)).toFixed(5));
+                $('#betSize').val((value / ($('#payout').val() - 1)).toFixed(7));
                 break;
         }
     }
+    
     $('#chanceToWin,#betSize,#payout,#profit').bind('input', function (e) {
-        recalculate($(this).attr("id"), this.value);
-    })
-
-    $('#chanceToWin,#betSize,#payout,#profit').keypress(function (e) {
         var charCode = e.keyCode;
+
         if ((charCode > 31 && charCode != 46 && charCode != 8 && (charCode < 48 || charCode > 57))) {
             return false;
         }
+        if($(this).attr("id") == "chanceToWin"){
+            if($(this).val()>100){
+                $(this).val(100);
+            }
+        }
+        recalculate($(this).attr("id"), this.value);
         return true;
     })
+
+    $('#chanceToWin,#betSize,#payout,#profit').bind('input', function (e) {
+        
+    })
+
 
     $('.plus').mousedown(function () {
         $('#chanceToWin').val(parseFloat($('#chanceToWin').val()) + 1);
