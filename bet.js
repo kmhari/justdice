@@ -34,19 +34,6 @@ Bet.get_next_nonce = function (options, callback) {
 };
 
 
-Bet.find = function (id, callback) {
-    db.query('SELECT * FROM bets where id = ?', id, function (err, rows, fields) {
-        if (err) {
-            console.log("BET:Find" + err);
-            throw err;
-        } else if (rows.length == 0) {
-            console.log("No bets made by the id:" + id);
-            throw {err: "bet detail not found", id: id}
-        } else
-            callback(rows[0]);
-    });
-};
-
 Bet.get_last_n_bets_by_id = function (n, id, callback) {
     db.query("SELECT * FROM bets WHERE user_id = ? ORDER BY id DESC LIMIT ? ", [id, n], function (err, rows, fields) {
         callback(err, rows);

@@ -33,6 +33,10 @@ app.set('view engine', 'ejs')
 app.set('views', __dirname + '/views');
 
 
+process.on('uncaughtException', function (err) {
+    console.log(err);
+})
+
 // development only
 if ('development' == app.get('env')) {
     app.use(express.errorHandler());
@@ -85,9 +89,8 @@ app.get('/bet/:betid', function (request, response) {
     Bet.find(request.params.betid, function (err, result) {
         if (result) {
             SeedDetail.find(result.seed_detail_id, function (err, seed_data) {
-                console.log(seed_data,err);
-                if (!err)
-                {
+                console.log(seed_data, err);
+                if (!err) {
                     seed_data["server_hash"] = crypto.createHash('sha256').update(seed_data.server_seed).digest("hex");
                     response.render("bet", {result: result, seed: seed_data})
                 }
@@ -184,7 +187,7 @@ io.sockets.on('connection', function (socket) {
                             });
                         })
                     } else {
-                        SeedDetail.find(data.seed_detail_id, function (err,seed_data) {
+                        SeedDetail.find(data.seed_detail_id, function (err, seed_data) {
                             message = {
                                 "action": "seed_data",
                                 "ssh": Seed.get_server_hash_by_seed(seed_data.server_seed),
@@ -218,12 +221,14 @@ function process_new_bet(message, socket) {
         if (err) {
             socket.emit("error", err);
         } else
-            Bet.find(bet_results["bet_result_data"], function (bet_data) {
-                bet_data["action"] = "new_bet";
-                io.sockets.emit("message", bet_data);
-                bet_data["action"] = "my_bet";
-                socket.emit("message", bet_data);
-                socket.emit("balance", bet_results["user_balance"]);
+            Bet.find(bet_results["bet_result_data"], function (err, bet_data) {
+                if (bet_data) {
+                    bet_data["action"] = "new_bet";
+                    io.sockets.emit("message", bet_data);
+                    bet_data["action"] = "my_bet";
+                    socket.emit("message", bet_data);
+                    socket.emit("balance", bet_results["user_balance"]);
+                }
             });
 
     });
@@ -251,7 +256,7 @@ function process_randomize_seed(message) {
 }
 
 app.use(express.static(path.join(__dirname, 'public')));
-server.listen(port, ipaddr);
+server.listen(port);
 
 
 function test() {
