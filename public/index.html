@@ -557,6 +557,8 @@
             case "payout":
                 $('#chanceToWin').val(((100 - house_edge) / value).toFixed(5));
                 $('#profit').val((($('#payout').val() - 1) * $('#betSize').val()).toFixed(5));
+                $('#rlow').text("<" + String(parseFloat($('#' + id).val()).toFixed(5)));
+                $('#rhigh').text(">" + String((99.99999 - parseFloat($('#' + id).val())).toFixed(5)));
                 break;
             case "betSize":
                 $('#profit').val((($('#payout').val() - 1) * value).toFixed(5));
